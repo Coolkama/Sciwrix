@@ -5,6 +5,7 @@ ScienceMD is a portable, self-contained Markdown editor designed for scientific 
 ## Current application
 
 The complete application is stored in [`index.html`](./index.html). Download that one file and open it in a modern browser; no installation or web server is required.
+If you would like to see it first, it is available though github pages at [`https://coolkama.github.io/ScienceMD/'](https://coolkama.github.io/ScienceMD/)
 
 ## Highlights
 
