@@ -337,13 +337,18 @@
       order: 1;
     }
 
-    #editorPanel textarea {
+    #editorPanel .table-tools {
       order: 2;
+    }
+
+    #editorPanel textarea,
+    #editorPanel .wysiwyg-editor {
+      order: 3;
       flex: 1 1 auto;
     }
 
     #editorPanel .panel-head {
-      order: 3;
+      order: 4;
       justify-content: flex-end;
       padding: 6px 10px;
       border-bottom: 0;
@@ -1016,6 +1021,205 @@
       font-family: "Cambria Math", Cambria, "Times New Roman", serif;
       font-weight: 700;
       font-size: 0.95rem;
+    }
+
+    .table-tools {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--accent) 6%, var(--panel));
+      overflow-x: auto;
+      scrollbar-width: thin;
+      flex: 0 0 auto;
+    }
+
+    .table-tools.show {
+      display: flex;
+    }
+
+    .table-tools strong {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-right: 2px;
+      white-space: nowrap;
+    }
+
+    .table-tools button {
+      min-height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 0 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .table-tools button:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .table-tools button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .table-tools button.danger:hover:not(:disabled) {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .wysiwyg-editor table {
+      cursor: text;
+    }
+
+    .wysiwyg-editor th,
+    .wysiwyg-editor td {
+      position: relative;
+      outline: none;
+    }
+
+    .wysiwyg-editor th:hover,
+    .wysiwyg-editor td:hover {
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 42%, transparent);
+    }
+
+    .wysiwyg-editor .table-cell-active {
+      box-shadow: inset 0 0 0 2px var(--accent) !important;
+    }
+
+    .table-dialog {
+      width: min(92vw, 460px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 0;
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .table-dialog::backdrop {
+      background: rgba(15, 23, 42, 0.48);
+      backdrop-filter: blur(3px);
+    }
+
+    .table-dialog-form {
+      padding: 20px;
+    }
+
+    .table-dialog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .table-dialog-head h2 {
+      margin: 0 0 5px;
+      font-size: 1.15rem;
+    }
+
+    .table-dialog-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .table-dialog .dialog-close {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .table-size-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .table-size-fields label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .table-size-fields input {
+      width: 100%;
+      min-height: 42px;
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    .table-dialog-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      margin: 18px 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel-2);
+    }
+
+    .table-dialog-preview span {
+      height: 18px;
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+      border-radius: 3px;
+      background: color-mix(in srgb, var(--accent) 7%, var(--panel));
+    }
+
+    .table-dialog-preview span:nth-child(-n+3) {
+      background: color-mix(in srgb, var(--accent) 18%, var(--panel));
+    }
+
+    .table-dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .table-dialog-actions button {
+      min-height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 0 16px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .table-dialog-actions button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    @media (max-width: 520px) {
+      .table-dialog-form { padding: 16px; }
+      .table-size-fields { grid-template-columns: 1fr; }
+      .table-tools button { min-height: 34px; }
     }
 
     .hidden { display: none; }
@@ -2739,9 +2943,13 @@
         order: 2 !important;
       }
 
+      #editorPanel .table-tools {
+        order: 3 !important;
+      }
+
       #editorPanel .wysiwyg-editor,
       #editorPanel textarea {
-        order: 3 !important;
+        order: 4 !important;
       }
 
       #previewPanel .preview {
@@ -2771,6 +2979,7 @@
       .format-toolbar button[data-action="quote"],
       .format-toolbar button[data-action="inlineMath"],
       .format-toolbar button[data-action="image"],
+      .format-toolbar button[data-action="sourceToggle"],
       .format-toolbar button[data-action="hr"] {
         margin-left: 8px !important;
         border-left-width: 1px !important;
@@ -2782,7 +2991,9 @@
       .format-toolbar button[data-action="italic"],
       .format-toolbar button[data-action="numbered"],
       .format-toolbar button[data-action="blockMath"],
-      .format-toolbar button[data-action="sourceToggle"] {
+      .format-toolbar button[data-action="table"],
+      .format-toolbar button[data-action="sourceToggle"],
+      .format-toolbar button[data-action="hr"] {
         border-top-right-radius: 8px !important;
         border-bottom-right-radius: 8px !important;
         border-right-width: 1px !important;
@@ -3174,8 +3385,17 @@
           <button type="button" data-action="inlineMath" class="math" title="Inline maths" aria-label="Inline maths"><svg class="bi bi-inline-math" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><text x="1.1" y="11.6" font-size="10" font-family="Arial, Helvetica, sans-serif" font-weight="800" fill="currentColor">x²</text></svg></button>
           <button type="button" data-action="blockMath" class="math" title="Block maths" aria-label="Block maths"><svg class="bi bi-block-math" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><text x="1.1" y="12.7" font-size="13" font-family="Arial, Helvetica, sans-serif" font-weight="800" fill="currentColor">∫</text></svg></button>
           <button type="button" data-action="image" title="Embed image" aria-label="Embed image"><svg class="bi bi-image" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1z"/></svg></button>
+          <button type="button" data-action="table" title="Insert table" aria-label="Insert table"><svg class="bi bi-table" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h13A1.5 1.5 0 0 1 16 2.5v11a1.5 1.5 0 0 1-1.5 1h-13A1.5 1.5 0 0 1 0 13.5zM1.5 2a.5.5 0 0 0-.5.5V5h4V2zm4.5 0v3h4V2zm5 0v3h4V2zM1 6v3h4V6zm5 0v3h4V6zm5 0v3h4V6zM1 10v3.5a.5.5 0 0 0 .5.5H5v-4zm5 0v4h4v-4zm5 0v4h3.5a.5.5 0 0 0 .5-.5V10z"/></svg></button>
           <button type="button" data-action="sourceToggle" title="Toggle Markdown source" aria-label="Toggle Markdown source"><svg class="bi bi-markdown" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.7C0 12.48.52 13 1.15 13h13.7c.63 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3M9 10.5H7.5V7.75L5.75 10H5.5L3.75 7.75v2.75H2.25v-5h1.5l1.875 2.5L7.5 5.5H9zm3.99 0h-1.75L9.5 8h1.5V5.5h1.5V8H14z"/></svg></button>
           <button type="button" data-action="hr" title="Horizontal rule" aria-label="Horizontal rule"><svg class="bi bi-dash-lg" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/></svg></button>
+        </div>
+        <div id="tableTools" class="table-tools" aria-label="Table editing tools" aria-hidden="true">
+          <strong>Table</strong>
+          <button type="button" data-table-action="addRow" title="Add a row below">Row +</button>
+          <button type="button" data-table-action="deleteRow" title="Delete this row">Row −</button>
+          <button type="button" data-table-action="addColumn" title="Add a column to the right">Column +</button>
+          <button type="button" data-table-action="deleteColumn" title="Delete this column">Column −</button>
+          <button type="button" data-table-action="deleteTable" class="danger" title="Delete this table">Delete table</button>
         </div>
         <div id="wysiwygEditor" class="wysiwyg-editor preview preview-style-default" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Visual Markdown editor"></div>
         <textarea id="editor" class="markdown-source hidden" spellcheck="true" aria-label="Markdown source editor"></textarea>
@@ -3192,6 +3412,37 @@
     <span id="footerStats">0 words · 0 chars</span>
   </footer>
 
+
+  <dialog id="tableDialog" class="table-dialog" aria-labelledby="tableDialogTitle">
+    <form id="tableForm" class="table-dialog-form">
+      <div class="table-dialog-head">
+        <div>
+          <h2 id="tableDialogTitle">Insert table</h2>
+          <p>Choose the table size. A heading row is added automatically for Markdown compatibility.</p>
+        </div>
+        <button id="tableDialogClose" type="button" class="dialog-close" aria-label="Close table dialog">×</button>
+      </div>
+      <div class="table-size-fields">
+        <label>
+          Columns
+          <input id="tableColumns" type="number" min="1" max="12" value="3" inputmode="numeric" required>
+        </label>
+        <label>
+          Data rows
+          <input id="tableRows" type="number" min="1" max="30" value="2" inputmode="numeric" required>
+        </label>
+      </div>
+      <div class="table-dialog-preview" aria-hidden="true">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+      <div class="table-dialog-actions">
+        <button id="tableDialogCancel" type="button">Cancel</button>
+        <button type="submit" class="primary">Insert table</button>
+      </div>
+    </form>
+  </dialog>
 
   <div id="drawerBackdrop" class="drawer-backdrop"></div>
 
@@ -3247,13 +3498,13 @@
       </div>
 
       <div class="math-section">
-        <h3>CSST</h3>
-        <button type="button" data-snippet="K_{\mathrm{sat}}">Ksat</button>
-        <button type="button" data-snippet="K = R_{abcd}R^{abcd}">K scalar</button>
-        <button type="button" data-snippet="x = \frac{K}{K_{\mathrm{sat}}}">x = K/Ksat</button>
-        <button type="button" data-snippet="\epsilon = 1-\frac{K}{K_{\mathrm{sat}}}">epsilon</button>
-        <button type="button" data-snippet="R(x) = (1-x)^p">R(x)</button>
-        <button type="button" data-snippet="\dot Q_{\mathrm{CSST}} = R(x)\,\dot Q_{\mathrm{GR}}">CSST law</button>
+        <h3>Physics</h3>
+        <button type="button" data-snippet="E = mc^{2}">E = mc²</button>
+        <button type="button" data-snippet="F = ma">F = ma</button>
+        <button type="button" data-snippet="v = f\lambda">v = fλ</button>
+        <button type="button" data-snippet="p = mv">p = mv</button>
+        <button type="button" data-snippet="E_k = \frac{1}{2}mv^{2}">Kinetic energy</button>
+        <button type="button" data-snippet="\lambda = \frac{h}{p}">de Broglie</button>
       </div>
     </div>
   </aside>
@@ -3353,9 +3604,16 @@
           <tr><td>Inline maths</td><td>Insert inline LaTeX maths</td></tr>
           <tr><td>Block maths</td><td>Insert display LaTeX maths</td></tr>
           <tr><td>Image</td><td>Embed an image into the Markdown file</td></tr>
+          <tr><td>Table</td><td>Insert a visual Markdown table</td></tr>
           <tr><td>MD</td><td>Switch between visual editing and Markdown source editing</td></tr>
           <tr><td>Rule</td><td>Insert a horizontal rule</td></tr>
         </table>
+      </section>
+
+      <section>
+        <h3>Tables</h3>
+        <p>Select <strong>Table</strong> in the edit toolbar, choose the number of columns and data rows, then type directly into the cells.</p>
+        <p>Clicking a cell opens controls for adding or removing rows and columns. Press <strong>Tab</strong> to move through cells; pressing Tab in the final cell adds another row.</p>
       </section>
 
       <section>
@@ -3417,6 +3675,13 @@ F = G\frac{m_1m_2}{r^2}
     const preview = document.getElementById('preview');
     const previewStyle = document.getElementById('previewStyle');
     const formatToolbar = document.querySelector('.format-toolbar');
+    const tableTools = document.getElementById('tableTools');
+    const tableDialog = document.getElementById('tableDialog');
+    const tableForm = document.getElementById('tableForm');
+    const tableColumns = document.getElementById('tableColumns');
+    const tableRows = document.getElementById('tableRows');
+    const tableDialogClose = document.getElementById('tableDialogClose');
+    const tableDialogCancel = document.getElementById('tableDialogCancel');
     const fileInput = document.getElementById('fileInput');
     const imageInput = document.getElementById('imageInput');
     const fileNameLabel = document.getElementById('fileName');
@@ -3474,8 +3739,10 @@ F = G\frac{m_1m_2}{r^2}
     let nextImageNumber = 1;
     let savedWysiwygRange = null;
     let activeMathEditInput = null;
+    let activeTableCell = null;
+    let savedTableSourceSelection = null;
 
-    const starterText = "# Welcome to ScienceMD\n\n**ScienceMD** is an offline Markdown and LaTeX writing editor for science notes, revision sheets, technical documents, and print-ready papers.\n\nIt keeps the Markdown as the master file while giving you two practical editing modes:\n\n- **Write** \u2014 visual editing for normal writing.\n- **MD** \u2014 direct Markdown source editing when you need exact control.\n\nThe full-width visual editor shows the formatted document directly. A hidden renderer is used only when printing or exporting, so it does not take up workspace. On phone or tablet, the same file still works as a compact mobile editor.\n\n---\n\n## 1. Start writing\n\nUse headings to structure your document:\n\n```markdown\n# Main title\n## Section heading\n### Subsection\n```\n\nThe section navigation button builds a document outline from your headings, which is useful for long papers or revision notes.\n\n---\n\n## 2. Maths support\n\nScienceMD supports LaTeX-style maths.\n\nInline maths uses `\\( ... \\)`:\n\n\\(E = mc^2\\)\n\nDisplay maths uses `\\[ ... \\]`:\n\n\\[\nF = G\\frac{m_1m_2}{r^2}\n\\]\n\nAnother example:\n\n\\[\nR(x) = (1-x)^p, \\qquad x = \\frac{K}{K_{\\mathrm{sat}}}\n\\]\n\nIn the visual editor, rendered maths can be clicked and edited directly. Click **Done** to return the formula to rendered form.\n\n---\n\n## 3. Formatting toolbar\n\nThe editor toolbar gives quick access to:\n\n| Tool | Use |\n|---|---|\n| H1, H2, H3 | headings |\n| Bold / Italic | emphasis |\n| Quote | block quotations |\n| Bullet / numbered list | lists |\n| Inline maths / block maths | LaTeX formulae |\n| Image | embedded images |\n| MD | switch between visual and Markdown source editing |\n| Horizontal rule | section breaks |\n\n---\n\n## 4. Document and print styles\n\nUse the Style selector in the Output group to change how the visual document and printed output look.\n\nUseful styles include:\n\n- **Science Paper** \u2014 formal serif layout for science documents.\n- **Default** \u2014 general reading and editing.\n- **Times** \u2014 classic Times New Roman appearance.\n- **Clean Draft** \u2014 spacious draft reading mode.\n\nThe chosen style affects the visual editor and print/PDF output. It does not alter the Markdown file.\n\n---\n\n## 5. Tables\n\nMarkdown tables are supported:\n\n| Quantity | Meaning | Notes |\n|---|---|---|\n| \\(K\\) | curvature scalar | example symbol |\n| \\(K_{\\mathrm{sat}}\\) | saturation scale | example parameter |\n| \\(x\\) | dimensionless state variable | \\(x = K/K_{\\mathrm{sat}}\\) |\n\n---\n\n## 6. Code blocks\n\nUse triple backticks for code:\n\n```csharp\npublic static double Response(double x, double p)\n{\n    return Math.Pow(1.0 - x, p);\n}\n```\n\n---\n\n## 7. Saving and exporting\n\n- **New** starts a fresh ScienceMD starter document.\n- **Open** loads an existing `.md` file.\n- **Save** downloads the current Markdown file.\n- **Save As** lets you choose a filename or export a self-contained rendered HTML copy.\n- **Print** in the Output group opens the browser print dialog, where you can print or save as PDF.\n\nAutosave uses browser storage as a safety net, but it is not a replacement for saving a real file.\n\n---\n\n## 8. Example paragraph\n\nThis is a normal paragraph for testing the visual editor, Markdown source, and print-ready document styles.\n";
+    const starterText = "# Welcome to ScienceMD\n\n**ScienceMD** is an offline Markdown and LaTeX writing editor for science notes, revision sheets, technical documents, and print-ready papers.\n\nIt keeps the Markdown as the master file while giving you two practical editing modes:\n\n- **Write** \u2014 visual editing for normal writing.\n- **MD** \u2014 direct Markdown source editing when you need exact control.\n\nThe full-width visual editor shows the formatted document directly. A hidden renderer is used only when printing or exporting, so it does not take up workspace. On phone or tablet, the same file still works as a compact mobile editor.\n\n---\n\n## 1. Start writing\n\nUse headings to structure your document:\n\n```markdown\n# Main title\n## Section heading\n### Subsection\n```\n\nThe section navigation button builds a document outline from your headings, which is useful for long papers or revision notes.\n\n---\n\n## 2. Maths support\n\nScienceMD supports LaTeX-style maths.\n\nInline maths uses `\\( ... \\)`:\n\n\\(E = mc^2\\)\n\nDisplay maths uses `\\[ ... \\]`:\n\n\\[\nF = G\\frac{m_1m_2}{r^2}\n\\]\n\nAnother example:\n\n\\[\nv = f\\lambda, \\qquad E_k = \\frac{1}{2}mv^2\n\\]\n\nIn the visual editor, rendered maths can be clicked and edited directly. Click **Done** to return the formula to rendered form.\n\n---\n\n## 3. Formatting toolbar\n\nThe editor toolbar gives quick access to:\n\n| Tool | Use |\n|---|---|\n| H1, H2, H3 | headings |\n| Bold / Italic | emphasis |\n| Quote | block quotations |\n| Bullet / numbered list | lists |\n| Inline maths / block maths | LaTeX formulae |\n| Image | embedded images |\n| Table | insert a table visually |\n| MD | switch between visual and Markdown source editing |\n| Horizontal rule | section breaks |\n\n---\n\n## 4. Document and print styles\n\nUse the Style selector in the Output group to change how the visual document and printed output look.\n\nUseful styles include:\n\n- **Science Paper** \u2014 formal serif layout for science documents.\n- **Default** \u2014 general reading and editing.\n- **Times** \u2014 classic Times New Roman appearance.\n- **Clean Draft** \u2014 spacious draft reading mode.\n\nThe chosen style affects the visual editor and print/PDF output. It does not alter the Markdown file.\n\n---\n\n## 5. Tables\n\nUse the **Table** toolbar button to choose the number of columns and data rows. Click directly in any cell to type. When a cell is active, table controls appear for adding or removing rows and columns. The document is still saved as a standard Markdown table.\n\n| Quantity | Meaning | Relationship |\n|---|---|---|\n| \\(v\\) | wave speed | \\(v = f\\lambda\\) |\n| \\(f\\) | frequency | measured in hertz |\n| \\(\\lambda\\) | wavelength | measured in metres |\n\n---\n\n## 6. Code blocks\n\nUse triple backticks for code:\n\n```csharp\npublic static double KineticEnergy(double mass, double velocity)\n{\n    return 0.5 * mass * velocity * velocity;\n}\n```\n\n---\n\n## 7. Saving and exporting\n\n- **New** starts a fresh ScienceMD starter document.\n- **Open** loads an existing `.md` file.\n- **Save** downloads the current Markdown file.\n- **Save As** lets you choose a filename or export a self-contained rendered HTML copy.\n- **Print** in the Output group opens the browser print dialog, where you can print or save as PDF.\n\nAutosave uses browser storage as a safety net, but it is not a replacement for saving a real file.\n\n---\n\n## 8. Example paragraph\n\nThis is a normal paragraph for testing the visual editor, Markdown source, and print-ready document styles.\n";
 
     function showToast(message) {
       clearTimeout(toastTimer);
@@ -3643,6 +3910,7 @@ F = G\frac{m_1m_2}{r^2}
       // look as though the old document was still loaded.
       activeMathEditInput = null;
       savedWysiwygRange = null;
+      hideTableTools();
 
       try {
         wysiwygSyncLock = true;
@@ -4650,7 +4918,25 @@ ${selected}
         return null;
       }
 
-      const splitRow = row => row.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => cell.trim());
+      const splitRow = row => {
+        const source = row.trim().replace(/^\|/, '').replace(/\|$/, '');
+        const cells = [];
+        let current = '';
+        for (let index = 0; index < source.length; index++) {
+          const char = source[index];
+          if (char === '\\' && source[index + 1] === '|') {
+            current += '|';
+            index++;
+          } else if (char === '|') {
+            cells.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        cells.push(current.trim());
+        return cells;
+      };
       const headers = splitRow(header);
       const rows = [];
       let i = startIndex + 2;
@@ -4870,6 +5156,7 @@ ${latex}
     function syncWysiwygFromMarkdown(force = false) {
       if (!wysiwygEditor || wysiwygSyncLock) return;
       if (!force && document.activeElement === wysiwygEditor) return;
+      hideTableTools();
       try {
         wysiwygSyncLock = true;
         wysiwygEditor.innerHTML = prepareWysiwygHtmlFromMarkdown(editor.value);
@@ -4955,11 +5242,18 @@ ${latex}
         }).join('\n');
       }
       if (tag === 'table') {
-        const rows = Array.from(node.querySelectorAll('tr')).map(tr => Array.from(tr.children).map(cell => textOf(cell).trim().replace(/\|/g, '\\|')));
+        const cellMarkdown = cell => {
+          const raw = Array.from(cell.childNodes).map(inlineMarkdownFromNode).join('');
+          if (!raw.replace(/\s/g, '')) return '';
+          return raw.replace(/\r?\n/g, '<br>').trim().replace(/\|/g, '\\|');
+        };
+        const rows = Array.from(node.rows || []).map(tr => Array.from(tr.cells || []).map(cellMarkdown));
         if (!rows.length) return '';
-        const head = rows[0];
+        const width = Math.max(...rows.map(row => row.length));
+        const normalise = row => Array.from({ length: width }, (_unused, index) => row[index] || '');
+        const head = normalise(rows[0]);
         const sep = head.map(() => '---');
-        return [head, sep, ...rows.slice(1)].map(r => '| ' + r.join(' | ') + ' |').join('\n');
+        return [head, sep, ...rows.slice(1).map(normalise)].map(row => '| ' + row.join(' | ') + ' |').join('\n');
       }
       if (tag === 'img') return inlineMarkdownFromNode(node);
       return inline();
@@ -4978,9 +5272,274 @@ ${latex}
       saveDraft(false);
     }
 
+    function hideTableTools() {
+      if (activeTableCell) activeTableCell.classList.remove('table-cell-active');
+      activeTableCell = null;
+      if (tableTools) {
+        tableTools.classList.remove('show');
+        tableTools.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    function tableCellFromSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return null;
+      let node = selection.anchorNode;
+      if (!node) return null;
+      if (node.nodeType !== Node.ELEMENT_NODE) node = node.parentElement;
+      const cell = node && node.closest ? node.closest('th, td') : null;
+      return cell && wysiwygEditor.contains(cell) ? cell : null;
+    }
+
+    function setActiveTableCell(cell) {
+      if (!cell || !wysiwygEditor.contains(cell)) {
+        hideTableTools();
+        return;
+      }
+      if (activeTableCell && activeTableCell !== cell) activeTableCell.classList.remove('table-cell-active');
+      activeTableCell = cell;
+      activeTableCell.classList.add('table-cell-active');
+      tableTools.classList.add('show');
+      tableTools.setAttribute('aria-hidden', 'false');
+
+      const table = cell.closest('table');
+      const row = cell.closest('tr');
+      const deleteRowButton = tableTools.querySelector('[data-table-action="deleteRow"]');
+      const deleteColumnButton = tableTools.querySelector('[data-table-action="deleteColumn"]');
+      if (deleteRowButton) {
+        const isHeader = !!row.closest('thead') || Array.from(row.cells).every(item => item.tagName.toLowerCase() === 'th');
+        deleteRowButton.disabled = isHeader;
+        deleteRowButton.title = isHeader ? 'The Markdown heading row cannot be deleted' : 'Delete this row';
+      }
+      if (deleteColumnButton) deleteColumnButton.disabled = !table || (table.rows[0]?.cells.length || 0) <= 1;
+    }
+
+    function focusTableCell(cell, selectContents = false) {
+      if (!cell) return;
+      wysiwygEditor.focus({ preventScroll: true });
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(cell);
+      if (!selectContents) range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedWysiwygRange = range.cloneRange();
+      setActiveTableCell(cell);
+      cell.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+
+    function createVisualTable(dataRows, columns) {
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      for (let column = 0; column < columns; column++) {
+        const th = document.createElement('th');
+        th.textContent = `Heading ${column + 1}`;
+        headerRow.appendChild(th);
+      }
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      for (let row = 0; row < dataRows; row++) {
+        const tr = document.createElement('tr');
+        for (let column = 0; column < columns; column++) {
+          const td = document.createElement('td');
+          td.appendChild(document.createElement('br'));
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      return table;
+    }
+
+    function insertVisualTable(dataRows, columns) {
+      const range = restoreWysiwygSelection();
+      if (!range) return;
+      range.deleteContents();
+
+      const table = createVisualTable(dataRows, columns);
+      const trailingParagraph = document.createElement('p');
+      trailingParagraph.appendChild(document.createElement('br'));
+
+      let directChild = range.startContainer.nodeType === Node.ELEMENT_NODE
+        ? range.startContainer
+        : range.startContainer.parentElement;
+      while (directChild && directChild.parentNode !== wysiwygEditor) directChild = directChild.parentElement;
+
+      const isEmptyBlock = directChild
+        && /^(P|DIV)$/i.test(directChild.tagName || '')
+        && !(directChild.textContent || '').trim()
+        && !directChild.querySelector('img, table, .wysiwyg-math');
+
+      if (isEmptyBlock) {
+        directChild.replaceWith(table, trailingParagraph);
+      } else if (directChild && directChild.parentNode === wysiwygEditor) {
+        directChild.after(table, trailingParagraph);
+      } else {
+        wysiwygEditor.append(table, trailingParagraph);
+      }
+
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      focusTableCell(table.rows[0]?.cells[0], true);
+      showToast(`Inserted ${columns}-column table`);
+    }
+
+    function markdownTableText(dataRows, columns) {
+      const header = Array.from({ length: columns }, (_unused, index) => `Heading ${index + 1}`);
+      const divider = Array.from({ length: columns }, () => '---');
+      const row = Array.from({ length: columns }, () => '');
+      return [header, divider, ...Array.from({ length: dataRows }, () => row)]
+        .map(cells => '| ' + cells.join(' | ') + ' |')
+        .join('\n');
+    }
+
+    function openTableDialog() {
+      if (isVisualModeActive()) {
+        saveWysiwygSelection();
+        savedTableSourceSelection = null;
+      } else {
+        savedTableSourceSelection = { start: editor.selectionStart, end: editor.selectionEnd };
+      }
+      tableColumns.value = '3';
+      tableRows.value = '2';
+      if (typeof tableDialog.showModal === 'function') {
+        tableDialog.showModal();
+        setTimeout(() => tableColumns.focus(), 0);
+      } else {
+        const columns = Math.max(1, Math.min(12, Number(prompt('Number of columns', '3')) || 3));
+        const rows = Math.max(1, Math.min(30, Number(prompt('Number of data rows', '2')) || 2));
+        if (isVisualModeActive()) {
+          insertVisualTable(rows, columns);
+        } else {
+          if (savedTableSourceSelection) {
+            editor.focus();
+            editor.setSelectionRange(savedTableSourceSelection.start, savedTableSourceSelection.end);
+          }
+          replaceSelection('\n\n' + markdownTableText(rows, columns) + '\n\n', 2, 0);
+          savedTableSourceSelection = null;
+        }
+      }
+    }
+
+    function addTableRowBelow(cell = activeTableCell) {
+      const table = cell?.closest('table');
+      if (!table) return;
+      const columnCount = table.rows[0]?.cells.length || 1;
+      const newRow = document.createElement('tr');
+      for (let column = 0; column < columnCount; column++) {
+        const td = document.createElement('td');
+        td.appendChild(document.createElement('br'));
+        newRow.appendChild(td);
+      }
+      const currentRow = cell.closest('tr');
+      const tbody = table.tBodies[0] || table.appendChild(document.createElement('tbody'));
+      if (currentRow.closest('thead')) tbody.insertBefore(newRow, tbody.firstChild);
+      else currentRow.after(newRow);
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      focusTableCell(newRow.cells[Math.min(cell.cellIndex, columnCount - 1)]);
+    }
+
+    function deleteActiveTableRow() {
+      const cell = activeTableCell;
+      const table = cell?.closest('table');
+      const row = cell?.closest('tr');
+      if (!table || !row || row.closest('thead')) return;
+      const columnIndex = cell.cellIndex;
+      const nextRow = row.nextElementSibling || row.previousElementSibling || table.rows[0];
+      row.remove();
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      focusTableCell(nextRow?.cells[Math.min(columnIndex, (nextRow?.cells.length || 1) - 1)] || table.rows[0]?.cells[0]);
+    }
+
+    function addTableColumnRight() {
+      const cell = activeTableCell;
+      const table = cell?.closest('table');
+      if (!table) return;
+      const insertIndex = cell.cellIndex + 1;
+      Array.from(table.rows).forEach((row, rowIndex) => {
+        const newCell = document.createElement(rowIndex === 0 ? 'th' : 'td');
+        if (rowIndex === 0) newCell.textContent = `Heading ${insertIndex + 1}`;
+        else newCell.appendChild(document.createElement('br'));
+        const reference = row.cells[insertIndex] || null;
+        row.insertBefore(newCell, reference);
+      });
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      focusTableCell(table.rows[cell.parentElement.rowIndex]?.cells[insertIndex] || table.rows[0]?.cells[insertIndex], true);
+    }
+
+    function deleteActiveTableColumn() {
+      const cell = activeTableCell;
+      const table = cell?.closest('table');
+      if (!table || (table.rows[0]?.cells.length || 0) <= 1) return;
+      const columnIndex = cell.cellIndex;
+      const rowIndex = cell.parentElement.rowIndex;
+      Array.from(table.rows).forEach(row => {
+        if (row.cells[columnIndex]) row.deleteCell(columnIndex);
+      });
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      const targetRow = table.rows[Math.min(rowIndex, table.rows.length - 1)];
+      focusTableCell(targetRow?.cells[Math.min(columnIndex, targetRow.cells.length - 1)] || table.rows[0]?.cells[0]);
+    }
+
+    function deleteActiveTable() {
+      const table = activeTableCell?.closest('table');
+      if (!table) return;
+      if (!confirm('Delete this table?')) return;
+      const replacement = document.createElement('p');
+      replacement.appendChild(document.createElement('br'));
+      table.replaceWith(replacement);
+      hideTableTools();
+      syncMarkdownFromWysiwyg();
+      scheduleRender();
+      const range = document.createRange();
+      range.selectNodeContents(replacement);
+      range.collapse(true);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedWysiwygRange = range.cloneRange();
+      showToast('Table deleted');
+    }
+
+    function handleTableToolAction(action) {
+      switch (action) {
+        case 'addRow': addTableRowBelow(); break;
+        case 'deleteRow': deleteActiveTableRow(); break;
+        case 'addColumn': addTableColumnRight(); break;
+        case 'deleteColumn': deleteActiveTableColumn(); break;
+        case 'deleteTable': deleteActiveTable(); break;
+      }
+    }
+
+    function moveThroughTable(event, cell) {
+      const table = cell.closest('table');
+      if (!table) return;
+      const cells = Array.from(table.querySelectorAll('th, td'));
+      let index = cells.indexOf(cell);
+      if (index < 0) return;
+      event.preventDefault();
+      if (event.shiftKey) {
+        if (index > 0) focusTableCell(cells[index - 1]);
+        return;
+      }
+      if (index === cells.length - 1) {
+        addTableRowBelow(cell);
+        return;
+      }
+      focusTableCell(cells[index + 1]);
+    }
+
     function setSourceMode(enabled) {
       sourceMode = !!enabled;
       if (sourceMode) {
+        hideTableTools();
         syncMarkdownFromWysiwyg();
         editor.value = collapseEmbeddedImages(editor.value);
         saveImageMap();
@@ -5476,6 +6035,10 @@ ${latex}
         setSourceMode(!sourceMode);
         return;
       }
+      if (action === 'table') {
+        openTableDialog();
+        return;
+      }
 
       if (!sourceMode && wysiwygEditor && !wysiwygEditor.classList.contains('hidden')) {
         switch (action) {
@@ -5827,6 +6390,7 @@ window.addEventListener('load', function () {
       // it, which left the previous document visible in WYSIWYG mode.
       activeMathEditInput = null;
       savedWysiwygRange = null;
+      hideTableTools();
       setEditorMarkdown(starterText, { collapseImages: false, resetScroll: true });
       setFileName('science-draft.md');
 
@@ -5895,6 +6459,42 @@ window.addEventListener('load', function () {
       handleFormatAction(button.getAttribute('data-action'));
     });
 
+    tableForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const columns = Math.max(1, Math.min(12, Number(tableColumns.value) || 3));
+      const rows = Math.max(1, Math.min(30, Number(tableRows.value) || 2));
+      tableDialog.close();
+      if (isVisualModeActive()) {
+        insertVisualTable(rows, columns);
+      } else {
+        if (savedTableSourceSelection) {
+          editor.focus();
+          editor.setSelectionRange(savedTableSourceSelection.start, savedTableSourceSelection.end);
+        }
+        replaceSelection('\n\n' + markdownTableText(rows, columns) + '\n\n', 2, 0);
+        savedTableSourceSelection = null;
+      }
+    });
+    tableDialogClose.addEventListener('click', () => {
+      savedTableSourceSelection = null;
+      tableDialog.close();
+    });
+    tableDialogCancel.addEventListener('click', () => {
+      savedTableSourceSelection = null;
+      tableDialog.close();
+    });
+
+    tableTools.addEventListener('pointerdown', event => {
+      const button = event.target.closest('button[data-table-action]');
+      if (button) event.preventDefault();
+    });
+    tableTools.addEventListener('click', event => {
+      const button = event.target.closest('button[data-table-action]');
+      if (!button || button.disabled) return;
+      event.preventDefault();
+      handleTableToolAction(button.getAttribute('data-table-action'));
+    });
+
     imageInput.addEventListener('change', event => {
       const file = event.target.files && event.target.files[0];
       insertEmbeddedImageFromFile(file);
@@ -5906,12 +6506,23 @@ window.addEventListener('load', function () {
       saveWysiwygSelection();
       syncMarkdownFromWysiwyg();
     });
-    wysiwygEditor.addEventListener('keyup', saveWysiwygSelection);
-    wysiwygEditor.addEventListener('mouseup', saveWysiwygSelection);
+    wysiwygEditor.addEventListener('keyup', () => {
+      saveWysiwygSelection();
+      const cell = tableCellFromSelection();
+      if (cell) setActiveTableCell(cell);
+    });
+    wysiwygEditor.addEventListener('mouseup', () => {
+      saveWysiwygSelection();
+      const cell = tableCellFromSelection();
+      if (cell) setActiveTableCell(cell);
+    });
     wysiwygEditor.addEventListener('touchend', () => setTimeout(saveWysiwygSelection, 0));
     wysiwygEditor.addEventListener('focus', saveWysiwygSelection);
     wysiwygEditor.addEventListener('click', event => {
       if (event.target.closest && event.target.closest('.math-edit-input, .math-edit-controls')) return;
+      const cell = event.target.closest && event.target.closest('th, td');
+      if (cell && wysiwygEditor.contains(cell)) setActiveTableCell(cell);
+      else hideTableTools();
       const mathNode = event.target.closest && event.target.closest('.wysiwyg-math[data-wysiwygmd-math]');
       if (!mathNode || !wysiwygEditor.contains(mathNode)) return;
       event.preventDefault();
@@ -5919,6 +6530,11 @@ window.addEventListener('load', function () {
     });
     wysiwygEditor.addEventListener('keydown', event => {
       if (event.target.closest && event.target.closest('.math-edit-input')) return;
+      const cell = tableCellFromSelection() || (event.target.closest && event.target.closest('th, td'));
+      if (event.key === 'Tab' && cell && wysiwygEditor.contains(cell)) {
+        moveThroughTable(event, cell);
+        return;
+      }
       if (event.key !== 'Enter' && event.key !== ' ') return;
       const mathNode = event.target.closest && event.target.closest('.wysiwyg-math[data-wysiwygmd-math]');
       if (!mathNode || !wysiwygEditor.contains(mathNode)) return;
