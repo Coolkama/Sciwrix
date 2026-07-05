@@ -78,8 +78,10 @@ public final class MainActivity extends Activity {
                 }
                 pendingFileSelection = filePathCallback;
 
+                Intent pickerIntent = createFilePickerIntent(fileChooserParams);
+
                 try {
-                    startActivityForResult(fileChooserParams.createIntent(), FILE_CHOOSER_REQUEST_CODE);
+                    startActivityForResult(pickerIntent, FILE_CHOOSER_REQUEST_CODE);
                     return true;
                 } catch (ActivityNotFoundException exception) {
                     pendingFileSelection = null;
@@ -94,6 +96,42 @@ public final class MainActivity extends Activity {
         } else {
             webView.restoreState(savedInstanceState);
         }
+    }
+
+    private Intent createFilePickerIntent(WebChromeClient.FileChooserParams fileChooserParams) {
+        if (isImageChooser(fileChooserParams.getAcceptTypes())) {
+            return fileChooserParams.createIntent();
+        }
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(
+            Intent.EXTRA_MIME_TYPES,
+            new String[] {
+                "text/markdown",
+                "text/x-markdown",
+                "text/plain",
+                "application/octet-stream"
+            }
+        );
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+
+        return Intent.createChooser(intent, "Open Markdown file");
+    }
+
+    private boolean isImageChooser(String[] acceptTypes) {
+        if (acceptTypes == null) {
+            return false;
+        }
+
+        for (String acceptType : acceptTypes) {
+            if (acceptType != null && acceptType.startsWith("image/")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
