@@ -1,3 +1,3 @@
 # Android build verification
 
-Third build check.
+Verification complete. The Android APK now builds successfully and supports opening Markdown files.
