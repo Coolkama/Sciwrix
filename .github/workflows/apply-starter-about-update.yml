@@ -1,0 +1,34 @@
+name: Apply starter and About update
+
+on:
+  push:
+    branches:
+      - update/starter-about-v1.2.1
+    paths:
+      - '.github/triggers/apply-starter-about-update'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-copy-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: update/starter-about-v1.2.1
+
+      - name: Apply copy update
+        run: python3 tools/apply_starter_about_update.py
+
+      - name: Run ScienceMD smoke checks
+        run: python3 tools/smoke_test.py
+
+      - name: Commit updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html android/app/build.gradle .github/workflows/release-android-apk.yml
+          git commit -m "Update starter document and About information"
+          git push
