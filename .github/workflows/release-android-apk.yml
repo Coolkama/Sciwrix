@@ -7,12 +7,12 @@ on:
         description: 'Release version, for example 1.2.0'
         required: true
         type: string
-        default: '1.2.0'
+        default: '1.2.1'
       version_code:
         description: 'Android version code; must increase for every release'
         required: true
         type: string
-        default: '3'
+        default: '4'
       prerelease:
         description: 'Mark this as a pre-release'
         required: true
