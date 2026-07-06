@@ -1,3 +1,317 @@
+01691:       .preview-panel-head {
+01692:         display: grid;
+01693:         grid-template-columns: 1fr;
+01694:         align-items: stretch;
+01695:         overflow: visible;
+01696:       }
+01697: 
+01698:       .preview-panel-head > span {
+01699:         display: block;
+01700:         width: 100%;
+01701:       }
+01702: 
+01703:       .preview-panel-head .preview-controls {
+01704:         width: 100%;
+01705:         max-width: 100%;
+01706:         justify-content: flex-start;
+01707:         overflow-x: auto;
+01708:         padding-top: 6px;
+01709:       }
+01710: 
+01711:       .preview-panel-head .preview-controls select {
+01712:         max-width: none;
+01713:       }
+01714: 
+01715:       .preview-panel-head .preview-controls button,
+01716:       .preview-panel-head .preview-controls select,
+01717:       .preview-panel-head .page-number-toggle {
+01718:         flex: 0 0 auto;
+01719:       }
+01720: 
+01721:       .preview-panel-head .preview-controls #clearBtn {
+01722:         margin-left: 0;
+01723:       }
+01724:     }
+01725: 
+01726: 
+01727:     @media (max-width: 560px) {
+01728:       #previewPanel .preview {
+01729:         height: calc(100dvh - 243px);
+01730:         min-height: calc(100dvh - 243px);
+01731:       }
+01732:     }
+01733: 
+01734: 
+01735:     @media (max-width: 560px) {
+01736:       #previewPanel .preview-panel-head {
+01737:         display: block;
+01738:       }
+01739: 
+01740:       #previewPanel .preview-panel-head .preview-controls {
+01741:         width: 100%;
+01742:         max-width: 100%;
+01743:         justify-content: flex-start;
+01744:         padding-top: 0;
+01745:       }
+01746: 
+01747:       #editorPanel .panel-head {
+01748:         justify-content: center;
+01749:       }
+01750:     }
+01751:     @media (min-width: 900px) {
+01752:       .tabs { display: none; }
+01753:       .workspace {
+01754:         grid-template-columns: 1fr 1fr;
+01755:       }
+01756:       .panel { min-height: calc(100dvh - 98px); }
+01757:       textarea {
+01758:         height: calc(100dvh - 199px);
+01759:         min-height: calc(100dvh - 199px);
+01760:       }
+01761: 
+01762:       .preview {
+01763:         height: calc(100dvh - 150px);
+01764:         min-height: calc(100dvh - 150px);
+01765:       }
+01766:       .hidden-on-mobile { display: block !important; }
+01767:     }
+01768:   
+01769: 
+01770: 
+01771:     /* v22: make all preview styles wrap to the actual visible preview pane width */
+01772:     .preview.preview-style-physics,
+01773:     .preview.preview-style-times,
+01774:     .preview.preview-style-draft {
+01775:       width: 100%;
+
+---
+
+03304:       }
+03305: 
+03306:       #previewStyle {
+03307:         min-width: 102px;
+03308:         padding-left: 7px;
+03309:         font-size: 0.75rem;
+03310:       }
+03311: 
+03312:       .output-group #printBtn {
+03313:         width: 30px !important;
+03314:         min-width: 30px !important;
+03315:         height: 29px !important;
+03316:       }
+03317: 
+03318:       .style-select-wrap {
+03319:         height: 29px;
+03320:       }
+03321:     }
+03322: 
+03323:   </style>
+03324: </head>
+03325: <body>
+03326:   <header>
+03327:     <div class="top-line">
+03328:       <div>
+03329:         <h1>ScienceMD</h1>
+03330:         <div id="fileName" class="subtitle">No file loaded — using local draft</div>
+03331:       </div>
+03332:       <div class="buttons top-toolbar" aria-label="Main actions">
+03333:         <div class="tool-group" data-ribbon-label="File" aria-label="File actions">
+03334:           <button id="clearBtn" type="button" title="New document" aria-label="New document"><svg class="bi bi-file-earmark-plus" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5"/><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/></svg></button>
+03335:           <label class="file-button" for="fileInput" title="Open Markdown file" aria-label="Open Markdown file"><svg class="bi bi-folder2-open" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764a1.5 1.5 0 0 1 1.06.44l.768.768A1.5 1.5 0 0 0 8.152 3.5H13.5A1.5 1.5 0 0 1 15 5v1H1z"/><path d="M.5 6.5a1 1 0 0 1 1-1h13a1 1 0 0 1 .976 1.217l-1.5 6.75A2 2 0 0 1 12.024 15H3.976a2 2 0 0 1-1.952-1.533L.524 6.717A1 1 0 0 1 .5 6.5M2.024 6.5l1.5 6.75a1 1 0 0 0 .976.75h8.048a1 1 0 0 0 .976-.75l1.5-6.75z"/></svg></label>
+03336:           <input id="fileInput" type="file" accept=".md,.markdown,text/markdown,text/plain" />
+03337:           <button id="downloadBtn" class="primary" type="button" title="Save Markdown" aria-label="Save Markdown"><svg class="bi bi-floppy" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M11 2H9v3h2z"/><path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.414 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/></svg></button>
+03338:           <button id="saveAsBtn" type="button" title="Save As" aria-label="Save As"><svg class="bi bi-file-earmark-arrow-down" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2 .007.007a.498.498 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L8.5 10.293z"/><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/></svg></button>
+03339:         </div>
+03340: 
+03341:         <div class="tool-group" data-ribbon-label="Document" aria-label="Document tools">
+03342:           <button id="undoBtn" type="button" title="Undo (Ctrl+Z)" aria-label="Undo" disabled><svg class="bi bi-arrow-counterclockwise" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/></svg></button>
+03343:           <button id="redoBtn" type="button" title="Redo (Ctrl+Y)" aria-label="Redo" disabled><svg class="bi bi-arrow-clockwise" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966a.25.25 0 0 1 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></svg></button>
+03344:           <button id="navBtn" type="button" title="Section navigation" aria-label="Section navigation"><svg class="bi bi-list-nested" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5"/></svg></button>
+03345:           <button id="mathBtn" type="button" title="Math palette" aria-label="Math palette"><svg class="bi bi-braces" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M2.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C3.25 2 2.49 2.759 2.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.965h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6M13.886 7.9v.163c-1.005.103-1.497.616-1.497 1.6v1.797c0 1.094-.39 1.538-1.354 1.538h-.273v.965h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456V7.332c-1.114 0-1.49-.362-1.49-1.456V4.352C13.51 2.759 12.75 2 11.138 2h-.376v.965h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6"/></svg></button>
+03346:           <button id="findBtn" type="button" title="Find and replace" aria-label="Find and replace"><svg class="bi bi-search" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg></button>
+03347:         </div>
+03348: 
+03349:         <div class="tool-group output-group" data-ribbon-label="Output" aria-label="Document output">
+03350:           <div class="style-select-wrap" title="Document style">
+03351:             <label class="style-select-label" for="previewStyle">Style</label>
+03352:             <select id="previewStyle" aria-label="Document style">
+03353:               <option value="default">Default</option>
+03354:               <option value="physics">Science Paper</option>
+03355:               <option value="times">Times</option>
+03356:               <option value="draft">Clean Draft</option>
+03357:             </select>
+03358:           </div>
+03359:           <button id="printBtn" type="button" title="Print / Save as PDF" aria-label="Print or save as PDF"><svg class="bi bi-printer" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zM3 12v-2h10v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1m11-6a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1V9H3v2H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/></svg></button>
+03360:         </div>
+03361: 
+03362:         <div class="tool-group" data-ribbon-label="View" aria-label="View actions">
+03363:           <button id="fullscreenBtn" type="button" title="Fullscreen" aria-label="Fullscreen"><svg class="bi bi-fullscreen" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"/></svg></button>
+03364:           <button id="darkBtn" type="button" title="Dark or light mode" aria-label="Dark or light mode"><svg class="bi bi-circle-half" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/></svg></button>
+03365:           <button id="helpBtn" type="button" title="Help and About" aria-label="Help and About"><svg class="bi bi-question-circle" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg></button>
+03366:         </div>
+03367:       </div>
+03368:     </div>
+03369:   </header>
+03370: 
+03371:   <nav class="tabs" aria-label="Editor view">
+03372:     <button id="editTab" class="tab active" type="button">Write</button>
+03373:     <button id="previewTab" class="tab" type="button">Preview</button>
+03374:     <button id="splitTab" class="tab" type="button" aria-hidden="true" tabindex="-1">Split</button>
+03375:   </nav>
+03376: 
+03377:   <main>
+03378:     <section class="workspace">
+03379:       <article id="editorPanel" class="panel">
+03380:         <div class="panel-head">
+03381:           <span id="editModeLabel">Visual editor</span>
+03382:           <span id="stats" class="status">0 words</span>
+03383:         </div>
+03384:         <div class="format-toolbar" aria-label="ScienceMD formatting toolbar">
+03385:           <button type="button" data-action="h1" title="Heading 1" aria-label="Heading 1"><svg class="bi bi-type-h1" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><text x="1.1" y="11.8" font-size="9.5" font-family="Arial, Helvetica, sans-serif" font-weight="800" fill="currentColor">H1</text></svg></button>
+03386:           <button type="button" data-action="h2" title="Heading 2" aria-label="Heading 2"><svg class="bi bi-type-h2" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><text x="1.1" y="11.8" font-size="9.5" font-family="Arial, Helvetica, sans-serif" font-weight="800" fill="currentColor">H2</text></svg></button>
+03387:           <button type="button" data-action="h3" title="Heading 3" aria-label="Heading 3"><svg class="bi bi-type-h3" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><text x="1.1" y="11.8" font-size="9.5" font-family="Arial, Helvetica, sans-serif" font-weight="800" fill="currentColor">H3</text></svg></button>
+03388:           <button type="button" data-action="bold" title="Bold" aria-label="Bold"><svg class="bi bi-type-bold" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M8.21 13c2.106 0 3.412-1.087 3.412-2.823 0-1.306-.984-2.283-2.324-2.386v-.055a2.176 2.176 0 0 0 1.852-2.14c0-1.51-1.162-2.46-3.014-2.46H3.843V13zM5.908 4.674h1.696c.963 0 1.517.451 1.517 1.244 0 .834-.629 1.32-1.73 1.32H5.908zm0 3.905h1.84c1.137 0 1.756.477 1.756 1.337 0 .943-.643 1.517-1.902 1.517H5.908z"/></svg></button>
+
+---
+
+03420:     <span id="footerStats">0 words · 0 chars</span>
+03421:   </footer>
+03422: 
+03423: 
+03424:   <dialog id="tableDialog" class="table-dialog" aria-labelledby="tableDialogTitle">
+03425:     <form id="tableForm" class="table-dialog-form">
+03426:       <div class="table-dialog-head">
+03427:         <div>
+03428:           <h2 id="tableDialogTitle">Insert table</h2>
+03429:           <p>Choose the table size. A heading row is added automatically for Markdown compatibility.</p>
+03430:         </div>
+03431:         <button id="tableDialogClose" type="button" class="dialog-close" aria-label="Close table dialog">×</button>
+03432:       </div>
+03433:       <div class="table-size-fields">
+03434:         <label>
+03435:           Columns
+03436:           <input id="tableColumns" type="number" min="1" max="12" value="3" inputmode="numeric" required>
+03437:         </label>
+03438:         <label>
+03439:           Data rows
+03440:           <input id="tableRows" type="number" min="1" max="30" value="2" inputmode="numeric" required>
+03441:         </label>
+03442:       </div>
+03443:       <div class="table-dialog-preview" aria-hidden="true">
+03444:         <span></span><span></span><span></span>
+03445:         <span></span><span></span><span></span>
+03446:         <span></span><span></span><span></span>
+03447:       </div>
+03448:       <div class="table-dialog-actions">
+03449:         <button id="tableDialogCancel" type="button">Cancel</button>
+03450:         <button type="submit" class="primary">Insert table</button>
+03451:       </div>
+03452:     </form>
+03453:   </dialog>
+03454: 
+03455:   <div id="drawerBackdrop" class="drawer-backdrop"></div>
+03456: 
+03457:   <aside id="mathDrawer" class="nav-drawer math-drawer" aria-label="Math palette" aria-hidden="true">
+03458:     <div class="nav-drawer-head">
+03459:       <strong>Math palette</strong>
+03460:       <button id="closeMathBtn" type="button">Close</button>
+03461:     </div>
+03462: 
+03463:     <div class="math-palette">
+03464:       <div class="math-section">
+03465:         <h3>Wrap</h3>
+03466:         <button type="button" data-math="inline">Inline \(x\)</button>
+03467:         <button type="button" data-math="block">Block \[x\]</button>
+03468:       </div>
+03469: 
+03470:       <div class="math-section">
+03471:         <h3>Common</h3>
+03472:         <button type="button" data-snippet="\frac{a}{b}" data-select-start="6" data-select-length="1">Fraction</button>
+03473:         <button type="button" data-snippet="\sqrt{x}" data-select-start="6" data-select-length="1">√</button>
+03474:         <button type="button" data-snippet="x^{2}" data-select-start="0" data-select-length="1">Power</button>
+03475:         <button type="button" data-snippet="x_{i}" data-select-start="0" data-select-length="1">Subscript</button>
+03476:         <button type="button" data-snippet="\dot{x}" data-select-start="5" data-select-length="1">Dot</button>
+03477:         <button type="button" data-snippet="\ddot{x}" data-select-start="6" data-select-length="1">Double dot</button>
+03478:       </div>
+03479: 
+03480:       <div class="math-section">
+03481:         <h3>Greek</h3>
+03482:         <button type="button" data-snippet="\epsilon">ε</button>
+03483:         <button type="button" data-snippet="\theta">θ</button>
+03484:         <button type="button" data-snippet="\sigma">σ</button>
+03485:         <button type="button" data-snippet="\omega">ω</button>
+03486:         <button type="button" data-snippet="\tau">τ</button>
+03487:         <button type="button" data-snippet="\Phi">Φ</button>
+03488:       </div>
+03489: 
+03490:       <div class="math-section">
+03491:         <h3>Relations</h3>
+03492:         <button type="button" data-snippet="\to">→</button>
+03493:         <button type="button" data-snippet="\ll">≪</button>
+03494:         <button type="button" data-snippet="\ge">≥</button>
+03495:         <button type="button" data-snippet="\le">≤</button>
+03496:         <button type="button" data-snippet="\infty">∞</button>
+03497:         <button type="button" data-snippet="\approx">≈</button>
+03498:       </div>
+03499: 
+03500:       <div class="math-section">
+03501:         <h3>Calculus</h3>
+03502:         <button type="button" data-snippet="\frac{dx}{d\tau}" data-select-start="6" data-select-length="2">dx/dτ</button>
+03503:         <button type="button" data-snippet="\frac{dS}{d\tau}" data-select-start="6" data-select-length="2">dS/dτ</button>
+03504:         <button type="button" data-snippet="\int_{x_0}^{x}" data-select-start="6" data-select-length="3">Integral</button>
+
+---
+
+03674: //# sourceMappingURL=purify.min.js.map
+03675: 
+03676: </script>
+03677: <script>
+03678: 
+03679:     const STORAGE_KEY = 'sciencemd:v1:draft';
+03680:     const THEME_KEY = 'sciencemd:theme';
+03681:     const FILENAME_KEY = 'sciencemd:v1:fileName';
+03682:     const PREVIEW_STYLE_KEY = 'sciencemd:previewStyle';
+03683:     const IMAGE_MAP_KEY = 'sciencemd:imageMap';
+03684: 
+03685:     const editor = document.getElementById('editor');
+03686:     const wysiwygEditor = document.getElementById('wysiwygEditor');
+03687:     const editModeLabel = document.getElementById('editModeLabel');
+03688:     const preview = document.getElementById('preview');
+03689:     const previewStyle = document.getElementById('previewStyle');
+03690:     const formatToolbar = document.querySelector('.format-toolbar');
+03691:     const tableTools = document.getElementById('tableTools');
+03692:     const tableDialog = document.getElementById('tableDialog');
+03693:     const tableForm = document.getElementById('tableForm');
+03694:     const tableColumns = document.getElementById('tableColumns');
+03695:     const tableRows = document.getElementById('tableRows');
+03696:     const tableDialogClose = document.getElementById('tableDialogClose');
+03697:     const tableDialogCancel = document.getElementById('tableDialogCancel');
+03698:     const fileInput = document.getElementById('fileInput');
+03699:     const imageInput = document.getElementById('imageInput');
+03700:     const fileNameLabel = document.getElementById('fileName');
+03701:     const downloadBtn = document.getElementById('downloadBtn');
+03702:     const saveAsBtn = document.getElementById('saveAsBtn');
+03703:     const printBtn = document.getElementById('printBtn');
+03704:     const clearBtn = document.getElementById('clearBtn');
+03705:     const undoBtn = document.getElementById('undoBtn');
+03706:     const redoBtn = document.getElementById('redoBtn');
+03707:     const darkBtn = document.getElementById('darkBtn');
+03708:     const fullscreenBtn = document.getElementById('fullscreenBtn');
+03709:     const helpBtn = document.getElementById('helpBtn');
+03710:     const helpDrawer = document.getElementById('helpDrawer');
+03711:     const closeHelpBtn = document.getElementById('closeHelpBtn');
+03712:     const navBtn = document.getElementById('navBtn');
+03713:     const findBtn = document.getElementById('findBtn');
+03714:     const mathBtn = document.getElementById('mathBtn');
+03715:     const closeNavBtn = document.getElementById('closeNavBtn');
+03716:     const closeMathBtn = document.getElementById('closeMathBtn');
+03717:     const navDrawer = document.getElementById('navDrawer');
+03718:     const mathDrawer = document.getElementById('mathDrawer');
+03719:     const drawerBackdrop = document.getElementById('drawerBackdrop');
+03720:     const findDrawer = document.getElementById('findDrawer');
+03721:     const closeFindBtn = document.getElementById('closeFindBtn');
+03722:     const findInput = document.getElementById('findInput');
+03723:     const replaceInput = document.getElementById('replaceInput');
 03724:     const caseSensitiveFind = document.getElementById('caseSensitiveFind');
 03725:     const findStatus = document.getElementById('findStatus');
 03726:     const prevMatchBtn = document.getElementById('prevMatchBtn');
@@ -86,9 +400,25 @@
 03809:         console.error(error);
 03810:         showToast('Fullscreen was blocked or is not available here.');
 03811:       } finally {
+03812:         setTimeout(updateFullscreenButton, 60);
+03813:       }
+03814:     }
+03815: 
+03816:     function setTheme(theme) {
+03817:       const isDark = theme === 'dark';
+03818:       document.body.classList.toggle('dark', isDark);
+03819:       darkBtn.textContent = isDark ? '☀' : '◐';
+03820:       safeSetStorage(THEME_KEY, theme, true);
+03821:     }
 
 ---
 
+03835:     }
+03836: 
+03837:     function safeGetStorage(key, fallback = '') {
+03838:       try {
+03839:         const value = localStorage.getItem(key);
+03840:         return value === null ? fallback : value;
 03841:       } catch (error) {
 03842:         console.warn('Could not read local storage:', key, error);
 03843:         return fallback;
@@ -297,9 +627,25 @@
 04046:         return `${prefix}\\[\n${inner}\n\\]`;
 04047:       });
 04048:     }
+04049: 
+04050:     function protectMath(markdown) {
+04051:       const blocks = [];
+04052:       const inlines = [];
+04053:       const codeParts = [];
+04054: 
+04055:       const stashCode = value => {
+04056:         const index = codeParts.length;
+04057:         codeParts.push(value);
+04058:         return `\uE000CODEPART${index}\uE000`;
 
 ---
 
+04361:       const replacement = replaceInput.value;
+04362:       const match = currentMatches[currentMatchIndex];
+04363: 
+04364:       editor.value = editor.value.slice(0, match.start) + replacement + editor.value.slice(match.end);
+04365:       editor.focus();
+04366:       editor.setSelectionRange(match.start, match.start + replacement.length);
 04367:       saveDraft();
 04368: 
 04369:       updateFindMatches(false);
@@ -369,9 +715,25 @@
 04433:       const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
 04434:       if (element && wysiwygEditor.contains(element)) {
 04435:         savedWysiwygRange = range.cloneRange();
+04436:       }
+04437:     }
+04438: 
+04439:     function restoreWysiwygSelection() {
+04440:       wysiwygEditor.focus();
+04441:       const selection = window.getSelection();
+04442:       if (!selection) return null;
+04443:       selection.removeAllRanges();
+04444: 
+04445:       if (savedWysiwygRange) {
 
 ---
 
+05151:       if (!target) return;
+05152: 
+05153:       const root = target.nodeType === Node.ELEMENT_NODE ? target : wysiwygEditor;
+05154:       const nodes = root.matches && root.matches('.wysiwyg-math, .math-inline[data-latex], .math-block[data-latex]')
+05155:         ? [root]
+05156:         : Array.from(root.querySelectorAll('.wysiwyg-math, .math-inline[data-latex], .math-block[data-latex]'));
 05157: 
 05158:       if (nodes.length) {
 05159:         Promise.all(nodes.map(renderMathNodeDirectly)).catch(error => {
@@ -441,9 +803,25 @@
 05223:         const href = node.getAttribute('href') || '';
 05224:         const label = Array.from(node.childNodes).map(inlineMarkdownFromNode).join('') || href;
 05225:         return href ? `[${label}](${href})` : label;
+05226:       }
+05227:       const inner = Array.from(node.childNodes).map(inlineMarkdownFromNode).join('');
+05228:       if (tag === 'strong' || tag === 'b') return `**${inner}**`;
+05229:       if (tag === 'em' || tag === 'i') return `*${inner}*`;
+05230:       if (tag === 'code') return '`' + inner.replace(/`/g, '\\`') + '`';
+05231:       if (tag === 'del' || tag === 's') return `~~${inner}~~`;
+05232:       return inner;
+05233:     }
+05234: 
+05235:     function blockMarkdownFromNode(node, listPrefix = '') {
 
 ---
 
+05260:             const childTag = child.nodeType === Node.ELEMENT_NODE ? child.tagName.toLowerCase() : '';
+05261:             return childTag === 'ul' || childTag === 'ol' ? '\n' + blockMarkdownFromNode(child).split('\n').map(x => '  ' + x).join('\n') : inlineMarkdownFromNode(child);
+05262:           }).join('').trim();
+05263:           return bullet + body;
+05264:         }).join('\n');
+05265:       }
 05266:       if (tag === 'table') {
 05267:         const cellMarkdown = cell => {
 05268:           const raw = Array.from(cell.childNodes).map(inlineMarkdownFromNode).join('');
@@ -541,9 +919,25 @@
 05360:         headerRow.appendChild(th);
 05361:       }
 05362:       thead.appendChild(headerRow);
+05363:       table.appendChild(thead);
+05364: 
+05365:       const tbody = document.createElement('tbody');
+05366:       for (let row = 0; row < dataRows; row++) {
+05367:         const tr = document.createElement('tr');
+05368:         for (let column = 0; column < columns; column++) {
+05369:           const td = document.createElement('td');
+05370:           td.appendChild(document.createElement('br'));
+05371:           tr.appendChild(td);
+05372:         }
 
 ---
 
+05486:       Array.from(table.rows).forEach((row, rowIndex) => {
+05487:         const newCell = document.createElement(rowIndex === 0 ? 'th' : 'td');
+05488:         if (rowIndex === 0) newCell.textContent = `Heading ${insertIndex + 1}`;
+05489:         else newCell.appendChild(document.createElement('br'));
+05490:         const reference = row.cells[insertIndex] || null;
+05491:         row.insertBefore(newCell, reference);
 05492:       });
 05493:       syncMarkdownFromWysiwyg();
 05494:       scheduleRender();
@@ -661,9 +1055,25 @@
 05606:       selection.removeAllRanges();
 05607:       selection.addRange(newRange);
 05608:       savedWysiwygRange = newRange.cloneRange();
+05609: 
+05610:       syncMarkdownFromWysiwyg();
+05611:       scheduleRender();
+05612:     }
+05613: 
+05614:     function insertMathInWysiwyg(kind, latex) {
+05615:       const range = restoreWysiwygSelection();
+05616:       if (!range) return false;
+05617: 
+05618:       const type = kind === 'block' ? 'block' : 'inline';
 
 ---
 
+05806:       return true;
+05807:     }
+05808: 
+05809:     function renderNow() {
+05810:       const linkedProgressBeforeRender = linkedScrollEnabled() ? getScrollProgress(getActiveEditorScroller()) : null;
+05811: 
 05812:       try {
 05813:         const editorRaw = editor.value || '';
 05814:         const raw = expandEmbeddedImages(editorRaw);
@@ -814,9 +1224,25 @@
 05959:     function getScrollProgress(element) {
 05960:       if (!element) return 0;
 05961:       const maxScroll = Math.max(1, element.scrollHeight - element.clientHeight);
+05962:       return clamp(element.scrollTop / maxScroll, 0, 1);
+05963:     }
+05964: 
+05965:     function setScrollProgress(element, progress) {
+05966:       if (!element) return;
+05967:       const maxScroll = Math.max(0, element.scrollHeight - element.clientHeight);
+05968:       element.scrollTop = maxScroll * clamp(progress, 0, 1);
+05969:     }
+05970: 
+05971:     function getActiveEditorScroller() {
 
 ---
 
+06285:       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+06286:       await new Promise(resolve => setTimeout(resolve, 180));
+06287: 
+06288:       window.print();
+06289: 
+06290:       setTimeout(() => {
 06291:         clearPrintClasses();
 06292:         document.title = previousTitle;
 06293:         applyScrollProgress('edit', previousProgress);
@@ -886,9 +1312,25 @@
 06357:         document.head.appendChild(style);
 06358:         document.body.appendChild(dialog);
 06359: 
+06360:         const input = dialog.querySelector('input[name="fileName"]');
+06361:         const check = dialog.querySelector('input[name="asHtml"]');
+06362: 
+06363:         check.addEventListener('change', () => {
+06364:           input.value = check.checked ? normaliseHtmlFileName(input.value) : normaliseMarkdownFileName(input.value);
+06365:         });
+06366: 
+06367:         dialog.addEventListener('close', () => {
+06368:           const result = dialog.returnValue === 'save'
+06369:             ? { fileName: input.value, asHtml: check.checked }
 
 ---
 
+06465: </html>`;
+06466:     }
+06467: 
+06468:     async function downloadRenderedHtml(fileNameOverride = null) {
+06469:       await ensurePreviewRenderedForExport();
+06470:       const safeName = normaliseHtmlFileName(fileNameOverride || currentFileName || 'draft.html');
 06471:       downloadTextFile(buildStaticHtmlDocument(), safeName, 'text/html;charset=utf-8');
 06472:       showToast(`Saved ${safeName}`);
 06473:     }
@@ -1058,9 +1500,18 @@
 06637: 
 06638:     tableTools.addEventListener('pointerdown', event => {
 06639:       const button = event.target.closest('button[data-table-action]');
-
----
-
+06640:       if (button) event.preventDefault();
+06641:     });
+06642:     tableTools.addEventListener('click', event => {
+06643:       const button = event.target.closest('button[data-table-action]');
+06644:       if (!button || button.disabled) return;
+06645:       event.preventDefault();
+06646:       handleTableToolAction(button.getAttribute('data-table-action'));
+06647:     });
+06648: 
+06649:     imageInput.addEventListener('change', event => {
+06650:       const file = event.target.files && event.target.files[0];
+06651:       insertEmbeddedImageFromFile(file);
 06652:       imageInput.value = '';
 06653:     });
 06654: 
@@ -1170,9 +1621,25 @@
 06758:     closeNavBtn.addEventListener('click', closeNavigation);
 06759:     closeMathBtn.addEventListener('click', closeMathPalette);
 06760: 
+06761:     mathDrawer.addEventListener('pointerdown', event => {
+06762:       const button = event.target.closest('button');
+06763:       if (!button) return;
+06764:       if (isVisualModeActive()) event.preventDefault();
+06765:     });
+06766: 
+06767:     mathDrawer.addEventListener('click', event => {
+06768:       const button = event.target.closest('button');
+06769:       if (!button) return;
+06770:       const hasActiveMathInput = !!(activeMathEditInput && document.body.contains(activeMathEditInput));
 
 ---
 
+06800:       if (!(event.ctrlKey || event.metaKey) || event.altKey || !editorHistoryShortcutTarget(event.target)) return;
+06801:       const key = event.key.toLowerCase();
+06802:       if (key === 'z') {
+06803:         event.preventDefault();
+06804:         if (event.shiftKey) redoDocument();
+06805:         else undoDocument();
 06806:       } else if (key === 'y') {
 06807:         event.preventDefault();
 06808:         redoDocument();
@@ -1242,3 +1709,11 @@
 06872:       Array.from(document.querySelectorAll('.top-toolbar .tool-group')).forEach(function (group, index) {
 06873:         if (!group.getAttribute('data-ribbon-label')) {
 06874:           group.setAttribute('data-ribbon-label', labels[index] || 'Tools');
+06875:         }
+06876:       });
+06877:     });
+06878:   })();
+06879: </script>
+06880: 
+06881: </body>
+06882: </html>
