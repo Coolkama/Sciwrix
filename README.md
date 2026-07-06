@@ -6,7 +6,11 @@ ScienceMD is a portable, self-contained Markdown editor designed for scientific 
 
 The complete web application is stored in [`index.html`](./index.html). Download that one file and open it in a modern browser; no installation or web server is required.
 
-The hosted version is available through [GitHub Pages](https://coolkama.github.io/ScienceMD/).
+- [ScienceMD product homepage](https://coolkama.github.io/ScienceMD/home/)
+- [Launch ScienceMD online](https://coolkama.github.io/ScienceMD/)
+- [Latest Android release](https://github.com/Coolkama/ScienceMD/releases/latest)
+
+The product homepage explains the online, standalone HTML and Android versions and provides current download links.
 
 ## Highlights
 
@@ -25,7 +29,7 @@ The hosted version is available through [GitHub Pages](https://coolkama.github.i
 
 ## Running ScienceMD in a browser
 
-1. Download `index.html`.
+1. Download `index.html` or use the **Download ScienceMD.html** button on the product homepage.
 2. Optionally rename it to `ScienceMD.html`.
 3. Open it in Chrome, Edge, Firefox, Safari, or another modern browser.
 
@@ -33,7 +37,7 @@ All required application code and libraries are embedded in the HTML file.
 
 ## Android app
 
-The Android project is stored in [`android`](./android). It packages the same self-contained `index.html` application in a native WebView wrapper with Android `.md` file selection and printing support.
+The Android project is stored in [`android`](./android). It packages the same self-contained `index.html` application in a native WebView wrapper with Android `.md` file association, native file selection, direct saving for writable documents and printing support.
 
 Every push affecting the application or Android wrapper runs smoke checks, Android lint and a debug APK build. Proper signed releases are produced manually through the **Release Android APK** GitHub Actions workflow after the repository signing secrets have been configured.
 
@@ -43,6 +47,7 @@ See [`android/RELEASING.md`](./android/RELEASING.md) for the one-time signing se
 
 ```text
 index.html                              Complete standalone application
+home/index.html                         Product homepage and download options
 assets/ScienceMD-icon.png               Browser/project icon
 android/                                Native Android wrapper
 android/RELEASING.md                    Signing and release instructions
@@ -64,7 +69,7 @@ python3 tools/smoke_test.py
 
 ## Status
 
-ScienceMD is under active development. The repository contains the latest working single-file web build and the Android wrapper used to produce installable APKs.
+ScienceMD is under active development. The repository contains the latest working single-file web build, product homepage and Android wrapper used to produce installable APKs.
 
 ## Author
 
