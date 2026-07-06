@@ -43,6 +43,13 @@ jobs:
       - name: Run ScienceMD smoke checks
         run: python3 tools/smoke_test.py
 
+      - name: Verify release notices
+        run: |
+          test -s LICENSE
+          test -s NOTICE
+          test -s THIRD_PARTY_NOTICES.md
+          test -s WICKED_GOOD_XPATH_LICENSE.txt
+
       - name: Validate release inputs and signing secrets
         shell: bash
         env:
@@ -100,7 +107,7 @@ jobs:
             -PSCIENCEMD_VERSION_NAME="$VERSION_NAME" \
             -PSCIENCEMD_VERSION_CODE="$VERSION_CODE"
 
-      - name: Verify, rename and checksum APK
+      - name: Verify, package and checksum release files
         id: package
         shell: bash
         env:
@@ -111,16 +118,34 @@ jobs:
           source_apk="android/app/build/outputs/apk/release/app-release.apk"
           release_dir="$RUNNER_TEMP/sciencemd-release"
           release_apk="$release_dir/ScienceMD-v${VERSION_NAME}.apk"
-          checksum_file="$release_apk.sha256"
+          latest_apk="$release_dir/ScienceMD.apk"
+          release_html="$release_dir/ScienceMD-v${VERSION_NAME}.html"
+          latest_html="$release_dir/ScienceMD.html"
+          checksum_file="$release_dir/ScienceMD-v${VERSION_NAME}-SHA256SUMS.txt"
 
           mkdir -p "$release_dir"
           cp "$source_apk" "$release_apk"
+          cp "$source_apk" "$latest_apk"
+          cp index.html "$release_html"
+          cp index.html "$latest_html"
 
           build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
           "$build_tools/apksigner" verify --verbose --print-certs "$release_apk"
-          sha256sum "$release_apk" > "$checksum_file"
+
+          (
+            cd "$release_dir"
+            sha256sum \
+              "ScienceMD-v${VERSION_NAME}.apk" \
+              "ScienceMD.apk" \
+              "ScienceMD-v${VERSION_NAME}.html" \
+              "ScienceMD.html" \
+              > "$(basename "$checksum_file")"
+          )
 
           echo "apk=$release_apk" >> "$GITHUB_OUTPUT"
+          echo "apk_latest=$latest_apk" >> "$GITHUB_OUTPUT"
+          echo "html=$release_html" >> "$GITHUB_OUTPUT"
+          echo "html_latest=$latest_html" >> "$GITHUB_OUTPUT"
           echo "checksum=$checksum_file" >> "$GITHUB_OUTPUT"
           echo "tag=v${VERSION_NAME}" >> "$GITHUB_OUTPUT"
 
@@ -130,7 +155,14 @@ jobs:
           name: ScienceMD-v${{ inputs.version_name }}
           path: |
             ${{ steps.package.outputs.apk }}
+            ${{ steps.package.outputs.apk_latest }}
+            ${{ steps.package.outputs.html }}
+            ${{ steps.package.outputs.html_latest }}
             ${{ steps.package.outputs.checksum }}
+            LICENSE
+            NOTICE
+            THIRD_PARTY_NOTICES.md
+            WICKED_GOOD_XPATH_LICENSE.txt
           if-no-files-found: error
           retention-days: 90
 
