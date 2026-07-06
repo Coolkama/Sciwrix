@@ -1,10 +1,10 @@
-name: Verify Markdown file association
+name: Verify Android file handling and saving
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
@@ -12,9 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Update About version
-        run: python3 tools/prepare_markdown_association_release.py
 
       - name: Run ScienceMD smoke checks
         run: python3 tools/smoke_test.py
@@ -33,15 +30,3 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew --no-daemon :app:lintDebug :app:assembleDebug
-
-      - name: Commit About version update
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          if git diff --cached --quiet; then
-            echo "No About version change to commit."
-          else
-            git commit -m "Update About version for ScienceMD 1.3.0"
-            git push
-          fi
