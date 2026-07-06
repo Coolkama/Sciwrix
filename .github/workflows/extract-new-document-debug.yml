@@ -38,10 +38,10 @@ jobs:
           chmod +x gradlew
           ./gradlew --no-daemon :app:lintDebug :app:assembleDebug
 
-      - name: Commit repaired New Document behaviour
+      - name: Commit maintained ScienceMD files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html tools/smoke_test.py
-          git commit -m "Fix New Document reset race"
+          git add index.html home/index.html tools/smoke_test.py .github/workflows/release-android-apk.yml
+          git commit -m "Add licences and release acknowledgements" || exit 0
           git push
