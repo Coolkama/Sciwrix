@@ -43,6 +43,12 @@ Every push affecting the application or Android wrapper runs smoke checks, Andro
 
 See [`android/RELEASING.md`](./android/RELEASING.md) for the one-time signing setup and release procedure.
 
+## Licence
+
+ScienceMD is Copyright 2026 Trevor Neil Kelleher and is licensed under the [Apache License 2.0](./LICENSE).
+
+ScienceMD embeds third-party software. Their licences, copyright notices and the licence option selected for DOMPurify are documented in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md). The full Wicked Good XPath MIT licence is provided in [WICKED_GOOD_XPATH_LICENSE.txt](./WICKED_GOOD_XPATH_LICENSE.txt), and attribution notices are collected in [NOTICE](./NOTICE).
+
 ## Repository structure
 
 ```text
@@ -51,6 +57,10 @@ home/index.html                         Product homepage and download options
 assets/ScienceMD-icon.png               Browser/project icon
 android/                                Native Android wrapper
 android/RELEASING.md                    Signing and release instructions
+LICENSE                                 Apache License 2.0 for ScienceMD
+NOTICE                                  ScienceMD and third-party attributions
+THIRD_PARTY_NOTICES.md                  Bundled software and licence details
+WICKED_GOOD_XPATH_LICENSE.txt           Full MIT licence for bundled XPath code
 tools/smoke_test.py                     Lightweight regression checks
 .github/workflows/build-android-apk.yml Debug build and validation workflow
 .github/workflows/release-android-apk.yml Signed GitHub Release workflow
