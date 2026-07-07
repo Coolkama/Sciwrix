@@ -7,7 +7,6 @@ on:
       - main
     paths:
       - 'index.html'
-      - 'assets/CKMark-icon.png'
       - 'android/**'
       - 'tools/smoke_test.py'
       - '.github/workflows/build-android-apk.yml'
@@ -16,7 +15,6 @@ on:
       - main
     paths:
       - 'index.html'
-      - 'assets/CKMark-icon.png'
       - 'android/**'
       - 'tools/smoke_test.py'
       - '.github/workflows/build-android-apk.yml'
