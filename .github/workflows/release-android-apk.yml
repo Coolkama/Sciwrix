@@ -172,6 +172,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.package.outputs.tag }}
           APK: ${{ steps.package.outputs.apk }}
+          APK_LATEST: ${{ steps.package.outputs.apk_latest }}
+          HTML: ${{ steps.package.outputs.html }}
+          HTML_LATEST: ${{ steps.package.outputs.html_latest }}
           CHECKSUM: ${{ steps.package.outputs.checksum }}
           PRERELEASE: ${{ inputs.prerelease }}
         run: |
@@ -185,7 +188,14 @@ jobs:
           args=(
             release create "$TAG"
             "$APK"
+            "$APK_LATEST"
+            "$HTML"
+            "$HTML_LATEST"
             "$CHECKSUM"
+            LICENSE
+            NOTICE
+            THIRD_PARTY_NOTICES.md
+            WICKED_GOOD_XPATH_LICENSE.txt
             --target "$GITHUB_SHA"
             --title "ScienceMD $TAG"
             --generate-notes
