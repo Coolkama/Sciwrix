@@ -23,5 +23,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add tools/export_flow_report.txt
-          git commit -m "Record export flow inspection"
+          git commit -m "Record focused export flow inspection"
           git push origin feature/latex-output
