@@ -1,6 +1,6 @@
 # CKMark
 
-CKMark is a portable, self-contained Markdown editor designed for scientific and technical writing. It combines Markdown editing, rendered preview, WYSIWYG-style editing, LaTeX mathematics, image embedding, document styles, undo/redo, and print/PDF support in a single HTML file.
+CKMark is a portable, self-contained Markdown editor designed for scientific and technical writing. It combines Markdown editing, rendered preview, WYSIWYG-style editing, LaTeX mathematics, image embedding, document styles, undo/redo, and print/PDF support in a single HTML  file.
 
 ## Current application
 
