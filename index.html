@@ -3344,7 +3344,40 @@
       }
     }
 
-  </style>
+  
+
+  /* CKMARK-EDITOR-WIDTH-OVERRIDE
+     Output styles may use paper-like page widths for print/export, but the
+     live editor should keep the same comfortable editing width on screen. */
+  @media screen {
+    main,
+    .workspace,
+    .editor-wrap,
+    .editor-shell,
+    .editor-column,
+    .editor-panel,
+    .editor-pane,
+    .editor-card,
+    .edit-pane,
+    .write-pane,
+    .md-pane,
+    .source-pane,
+    .visual-pane,
+    .document-pane,
+    #editor,
+    #visualEditor,
+    [contenteditable="true"] {
+      max-width: none !important;
+    }
+
+    #editor,
+    #visualEditor,
+    [contenteditable="true"] {
+      width: 100% !important;
+    }
+  }
+
+</style>
 </head>
 <body>
   <header>
