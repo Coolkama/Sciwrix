@@ -38,3 +38,5 @@ jobs:
           git add home/index.html
           git commit -m "Make Sciwrix prominent on homepage"
           git push origin HEAD:main
+
+# Temporary workflow; remove after the homepage patch has landed.
