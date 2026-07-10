@@ -19,48 +19,46 @@ jobs:
           ref: feature/revised-ribbon-ui
           fetch-depth: 0
 
-      - name: Extract relevant runtime contexts
+      - name: Extract focused runtime contexts
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           text = Path('index.html').read_text(encoding='utf-8')
           terms = [
               'updateFullscreenButton',
               'isFullscreenActive',
-              'localStorage.setItem',
-              'localStorage.getItem',
-              'autosave',
-              'restore',
-              'loadDraft',
-              'saveDraft',
-              'previewFrame',
-              'iframe',
-              'srcdoc',
+              'showToast(',
+              '<iframe',
+              "createElement('iframe')",
+              'createElement("iframe")',
+              'contentDocument',
               'contentWindow',
-              'DOMContentLoaded',
-              'starterText'
+              'window.frames',
+              '.src =',
+              '.src=',
+              'location.href',
+              'document.location',
+              'window.location',
+              'previewPanel',
+              'printPreview',
+              'safeGetStorage(STORAGE_KEY',
+              'safeSetStorage(STORAGE_KEY',
           ]
           out = []
           for term in terms:
               out.append(f'\n===== {term} =====\n')
-              start = 0
-              count = 0
-              while True:
-                  pos = text.find(term, start)
-                  if pos < 0:
-                      break
-                  count += 1
-                  lo = max(0, pos - 900)
-                  hi = min(len(text), pos + 1400)
-                  out.append(f'\n--- occurrence {count} at {pos} ---\n')
-                  out.append(text[lo:hi])
-                  start = pos + len(term)
-                  if count >= 12:
-                      out.append('\n[truncated after 12 occurrences]\n')
-                      break
-              if count == 0:
+              positions = [m.start() for m in re.finditer(re.escape(term), text, flags=re.I)]
+              if not positions:
                   out.append('[none]\n')
+                  continue
+              for count, pos in enumerate(positions[:20], 1):
+                  lo = max(0, pos - 1200)
+                  hi = min(len(text), pos + 1800)
+                  out.append(f'\n--- occurrence {count} at {pos} ---\n{text[lo:hi]}\n')
+              if len(positions) > 20:
+                  out.append(f'\n[truncated: {len(positions)} total occurrences]\n')
 
           Path('_runtime_diagnostic.txt').write_text(''.join(out), encoding='utf-8')
           PY
@@ -70,5 +68,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add _runtime_diagnostic.txt
-          git commit -m 'Add temporary autosave runtime diagnostic'
+          git commit -m 'Refresh temporary autosave runtime diagnostic'
           git push origin HEAD:feature/revised-ribbon-ui
