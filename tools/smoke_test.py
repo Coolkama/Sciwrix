@@ -100,6 +100,19 @@ require(
     ";\n      const target = document.documentElement;" not in html,
     "fullscreen code has escaped from its function body",
 )
+require(
+    '<option value="normal">Normal</option>' in html,
+    "Normal block style is missing from the Markdown ribbon",
+)
+require(
+    'setInterval(resizeSourceEditor' not in html,
+    "Markdown source editor still has the scroll-resetting resize timer",
+)
+require(
+    'height: calc(100dvh - 175px) !important;' in html
+    and 'overflow: auto !important;' in html,
+    "Markdown source editor does not have a stable scrollable viewport",
+)
 
 node = shutil.which("node")
 if node:
