@@ -1,17 +1,17 @@
 name: Apply tested mobile editor fix
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/apply-mobile-hotfix-now.yml'
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: write
+  issues: read
+  pull-requests: read
 
 jobs:
   patch:
+    if: github.event.issue.pull_request && github.event.issue.number == 17 && github.event.comment.body == '/apply-tested-mobile-fix'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
