@@ -212,7 +212,7 @@ require("forceSaveAs" in activity, "Save As distinction is missing")
 
 require("SCIENCEMD_VERSION_CODE" in gradle, "release version override is missing")
 require("SCIENCEMD_KEYSTORE_PATH" in gradle, "release signing configuration is missing")
-require("?: '13'" in gradle and "?: '1.5.0'" in gradle, "Android 1.5.0 version defaults are missing")
+require("?: '15'" in gradle and "?: '1.6.0'" in gradle, "Android 1.6.0 version defaults are missing")
 require(icon_source.is_file() and icon_source.stat().st_size > 1_000, "launcher icon source is missing")
 
 require((ROOT / "LICENSE").is_file(), "Apache 2.0 LICENSE file is missing")
