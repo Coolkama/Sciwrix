@@ -14,6 +14,7 @@ on:
   pull_request:
     branches:
       - main
+      - automation/autosave-repair-base
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
