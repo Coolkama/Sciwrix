@@ -8198,8 +8198,13 @@ ${body}
   function applyVisualBlock(kind) {
     const visual = byId('wysiwygEditor');
     if (!visual) return false;
-    visual.focus({ preventScroll: true });
-    const tag = kind === 'code' ? 'pre' : 'p';
+    const tag = kind === 'code' ? '<pre>' : '<p>';
+
+    if (typeof window.execWysiwyg === 'function') {
+      window.execWysiwyg('formatBlock', tag);
+      return true;
+    }
+
     document.execCommand('formatBlock', false, tag);
     dispatchEditorInput(visual);
     return true;
@@ -8304,7 +8309,7 @@ ${body}
       case 'markdown':
         return group(
           '<select class="sciwrix-tool-select" id="sciwrixBlockStyle" aria-label="Block style">' +
-            '<option value="normal">Normal</option>' +
+            '<option value="" selected>Style</option><option value="normal">Normal</option>' +
             '<option value="h1">Heading 1</option>' +
             '<option value="h2">Heading 2</option>' +
             '<option value="h3">Heading 3</option>' +
@@ -8560,8 +8565,9 @@ ${body}
 
     shell.addEventListener('change', event => {
       if (event.target.id === 'sciwrixBlockStyle') {
-        applyBlockStyle(event.target.value);
-        event.target.value = 'normal';
+        const blockStyle = event.target.value;
+        if (blockStyle) applyBlockStyle(blockStyle);
+        event.target.value = '';
       } else if (event.target.id === 'sciwrixDocumentStyle') {
         applyDocumentStyle(event.target.value);
       }
