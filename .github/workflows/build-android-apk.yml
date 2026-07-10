@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - feature/revised-ribbon-ui
     paths:
       - 'index.html'
       - 'android/**'
