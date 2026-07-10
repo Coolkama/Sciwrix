@@ -3414,7 +3414,7 @@
 
   #sciwrixRibbonShell {
     position: relative;
-    z-index: 1200;
+    z-index: auto;
     flex: 0 0 auto;
     width: 100%;
     color: var(--sciwrix-text);
@@ -3839,6 +3839,16 @@
     display: none !important;
   }
 }
+
+
+  /* Keep the ribbon in normal document stacking; drawers must cover it. */
+  body.sciwrix-ribbon-enabled #drawerBackdrop.drawer-backdrop {
+    z-index: 2147483646 !important;
+  }
+
+  body.sciwrix-ribbon-enabled .nav-drawer {
+    z-index: 2147483647 !important;
+  }
 </style>
 </head>
 <body>
@@ -8314,8 +8324,6 @@ ${body}
           tool('save', 'Save', '💾') +
           tool('saveAs', 'Save As', '🗎')
         ) + separator() + group(
-          tool('exportHtml', 'Export HTML', 'HTML') +
-          tool('exportLatex', 'Export LaTeX', 'TeX') +
           tool('print', 'Print', '🖨')
         );
 
@@ -8459,8 +8467,6 @@ ${body}
       }
       case 'save': clickKnown('downloadBtn', ['save']); break;
       case 'saveAs': clickKnown('saveAsBtn', ['save', 'as']); break;
-      case 'exportHtml': openExport('html'); break;
-      case 'exportLatex': openExport('latex'); break;
       case 'print': clickKnown('printBtn', ['print']); break;
       case 'undo':
         if (!clickKnown('undoBtn', ['undo'])) document.execCommand('undo');
@@ -8632,73 +8638,6 @@ ${body}
   } else {
     initialise();
   }
-})();
-</script>
-<script id="sciwrix-ribbon-followup-fixes">
-(() => {
-  'use strict';
-
-  const layerStyle = document.createElement('style');
-  layerStyle.id = 'sciwrix-ribbon-followup-layer-styles';
-  layerStyle.textContent = [
-    'body.sciwrix-ribbon-enabled #drawerBackdrop.drawer-backdrop { z-index: 3100 !important; }',
-    'body.sciwrix-ribbon-enabled .nav-drawer { z-index: 3101 !important; }',
-    'body.sciwrix-ribbon-enabled .save-as-dialog, body.sciwrix-ribbon-enabled #tableDialog { z-index: 3201 !important; }'
-  ].join('\n');
-  document.head.appendChild(layerStyle);
-
-  function prepareExportDialog(format) {
-    const legacySaveAs = document.getElementById('saveAsBtn');
-    if (!legacySaveAs) return;
-
-    legacySaveAs.click();
-
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      attempts += 1;
-      const dialog = document.querySelector('.save-as-dialog');
-      const select = dialog && dialog.querySelector('select[name="format"]');
-      if (!dialog || !select) {
-        if (attempts >= 20) window.clearInterval(timer);
-        return;
-      }
-
-      window.clearInterval(timer);
-      select.value = format;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-
-      const heading = dialog.querySelector('h3');
-      const primary = dialog.querySelector('.save-as-actions .primary');
-      const filename = dialog.querySelector('input[name="fileName"]');
-      const note = dialog.querySelector('.save-as-note');
-      const isHtml = format === 'html';
-
-      if (heading) heading.textContent = isHtml ? 'Export HTML' : 'Export LaTeX';
-      if (primary) primary.textContent = 'Export';
-      if (note) {
-        note.textContent = isHtml
-          ? 'Exports the rendered document as a standalone HTML file.'
-          : 'Exports a compile-ready LaTeX document while preserving maths and common Markdown structures.';
-      }
-      if (filename) {
-        filename.focus();
-        filename.select();
-      }
-    }, 25);
-  }
-
-  document.addEventListener('click', event => {
-    const button = event.target.closest('#sciwrixRibbonShell [data-ribbon-action]');
-    if (!button) return;
-
-    const action = button.dataset.ribbonAction;
-    if (action !== 'exportHtml' && action !== 'exportLatex') return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    prepareExportDialog(action === 'exportHtml' ? 'html' : 'latex');
-  }, true);
 })();
 </script>
 </body>
