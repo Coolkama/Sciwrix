@@ -17,10 +17,11 @@ on:
       - 'index.html'
       - 'android/**'
       - 'tools/smoke_test.py'
+      - 'tools/update_onboarding_copy.py'
       - '.github/workflows/build-android-apk.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -28,6 +29,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: feature/revised-ribbon-ui
+          fetch-depth: 0
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -38,8 +42,72 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Apply revised starter document and help text
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('tools/update_onboarding_copy.py')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace("help_intro = '''", "help_intro = r'''", 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+          python3 tools/update_onboarding_copy.py
+
       - name: Run Sciwrix smoke checks
         run: python3 tools/smoke_test.py
+
+      - name: Validate inline JavaScript
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import subprocess
+          import tempfile
+
+          text = Path('index.html').read_text(encoding='utf-8')
+          assert '# Welcome to Sciwrix' in text
+          assert '## The ribbon' in text
+          assert '<h3>Ribbon tabs</h3>' in text
+          assert '<strong>Help &amp; About</strong>' in text
+          assert 'Use **Write**' not in text
+          assert 'Output group' not in text
+          assert text.count('SCIENCEMD-LICENCES-START') == 1
+          assert text.count('SCIENCEMD-LICENCES-END') == 1
+          assert text.rstrip().endswith('</html>')
+
+          class Scripts(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=False)
+                  self.capture = False
+                  self.current = []
+                  self.scripts = []
+                  self.attrs = {}
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() == 'script':
+                      self.attrs = dict(attrs)
+                      self.capture = 'src' not in self.attrs
+                      self.current = []
+              def handle_data(self, data):
+                  if self.capture:
+                      self.current.append(data)
+              def handle_endtag(self, tag):
+                  if tag.lower() == 'script' and self.capture:
+                      script_type = self.attrs.get('type', '').lower()
+                      if script_type in ('', 'text/javascript', 'application/javascript', 'module'):
+                          self.scripts.append((script_type, ''.join(self.current)))
+                      self.capture = False
+
+          parser = Scripts()
+          parser.feed(text)
+          with tempfile.TemporaryDirectory() as tmp:
+              for i, (script_type, source) in enumerate(parser.scripts):
+                  if not source.strip():
+                      continue
+                  suffix = '.mjs' if script_type == 'module' else '.js'
+                  path = Path(tmp) / f'script-{i}{suffix}'
+                  path.write_text(source, encoding='utf-8')
+                  subprocess.run(['node', '--check', str(path)], check=True)
+          PY
 
       - name: Lint and build debug APK
         working-directory: android
@@ -55,3 +123,15 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
+
+      - name: Commit revised onboarding content
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'No onboarding changes required'
+            exit 0
+          fi
+          git commit -m 'Update starter document and help for ribbon UI'
+          git push origin HEAD:feature/revised-ribbon-ui
