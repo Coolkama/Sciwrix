@@ -1,0 +1,120 @@
+name: Repair autosave startup runtime
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/diagnose-autosave-runtime.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/revised-ribbon-ui
+          fetch-depth: 0
+
+      - name: Restore startup helpers and autosave guard checks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          index_path = Path('index.html')
+          text = index_path.read_text(encoding='utf-8')
+
+          helper_markers = [
+              '    function showToast(message) {',
+              '    function isFullscreenActive() {',
+              '    function updateFullscreenButton() {',
+          ]
+          present = [marker in text for marker in helper_markers]
+          if any(present) and not all(present):
+              raise SystemExit(f'Fullscreen helper set is incomplete: {present}')
+
+          if not all(present):
+              needle = '    async function toggleFullscreen() {'
+              if text.count(needle) != 1:
+                  raise SystemExit(f'Expected one toggleFullscreen function, found {text.count(needle)}')
+              helpers = '''    function showToast(message) {
+              clearTimeout(toastTimer);
+              toast.textContent = message;
+              toast.classList.add('show');
+              toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            function isFullscreenActive() {
+              return !!(document.fullscreenElement || document.webkitFullscreenElement);
+            }
+
+            function updateFullscreenButton() {
+              if (!fullscreenBtn) return;
+              fullscreenBtn.textContent = isFullscreenActive() ? '×' : '⛶';
+              fullscreenBtn.setAttribute('aria-label', isFullscreenActive() ? 'Exit fullscreen' : 'Enter fullscreen');
+              fullscreenBtn.setAttribute('title', isFullscreenActive() ? 'Exit fullscreen' : 'Enter fullscreen');
+            }
+
+'''
+              text = text.replace(needle, helpers + needle, 1)
+
+          required_runtime = [
+              '    function showToast(message) {',
+              '    function isFullscreenActive() {',
+              '    function updateFullscreenButton() {',
+              'const restoredDraft = safeGetStorage(STORAGE_KEY, starterText) || starterText;',
+          ]
+          for marker in required_runtime:
+              if marker not in text:
+                  raise SystemExit(f'Missing runtime marker after repair: {marker}')
+
+          index_path.write_text(text, encoding='utf-8')
+
+          smoke_path = Path('tools/smoke_test.py')
+          smoke = smoke_path.read_text(encoding='utf-8')
+          anchor = '''require(
+              "async function toggleFullscreen()" in html,
+              "toggleFullscreen function boundary is missing",
+          )
+'''
+          addition = '''require(
+              "async function toggleFullscreen()" in html,
+              "toggleFullscreen function boundary is missing",
+          )
+          require(
+              "function showToast(message)" in html,
+              "showToast helper is missing and startup notifications will fail",
+          )
+          require(
+              "function isFullscreenActive()" in html,
+              "isFullscreenActive helper is missing",
+          )
+          require(
+              "function updateFullscreenButton()" in html,
+              "updateFullscreenButton helper is missing and startup will stop before autosave restore",
+          )
+          require(
+              "const restoredDraft = safeGetStorage(STORAGE_KEY, starterText) || starterText;" in html,
+              "autosaved document restoration is missing",
+          )
+'''
+          if addition not in smoke:
+              if smoke.count(anchor) != 1:
+                  raise SystemExit(f'Expected one fullscreen smoke-test anchor, found {smoke.count(anchor)}')
+              smoke = smoke.replace(anchor, addition, 1)
+          smoke_path.write_text(smoke, encoding='utf-8')
+          PY
+
+      - name: Run repository smoke checks
+        run: python3 tools/smoke_test.py
+
+      - name: Commit repair
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html tools/smoke_test.py
+          git commit -m 'Restore autosave startup and fullscreen helpers'
+          git push origin HEAD:feature/revised-ribbon-ui

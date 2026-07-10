@@ -97,12 +97,40 @@ require(
     "toggleFullscreen function boundary is missing",
 )
 require(
+    "function showToast(message)" in html,
+    "showToast helper is missing and startup notifications will fail",
+)
+require(
+    "function isFullscreenActive()" in html,
+    "isFullscreenActive helper is missing",
+)
+require(
+    "function updateFullscreenButton()" in html,
+    "updateFullscreenButton helper is missing and startup will stop before autosave restore",
+)
+require(
+    "const restoredDraft = safeGetStorage(STORAGE_KEY, starterText) || starterText;" in html,
+    "autosaved document restoration is missing",
+)
+require(
     ";\n      const target = document.documentElement;" not in html,
     "fullscreen code has escaped from its function body",
 )
 require(
     '<option value="normal">Normal</option>' in html,
     "Normal block style is missing from the Markdown ribbon",
+)
+require(
+    '<option value="" selected>Style</option><option value="normal">Normal</option>' in html,
+    "Normal block style cannot be selected repeatedly",
+)
+require(
+    "event.target.value = 'normal';" not in html,
+    "Block-style selector still prevents choosing Normal",
+)
+require(
+    "window.execWysiwyg('formatBlock', tag)" in html,
+    "Normal visual formatting does not preserve the editor selection",
 )
 require(
     'setInterval(resizeSourceEditor' not in html,
