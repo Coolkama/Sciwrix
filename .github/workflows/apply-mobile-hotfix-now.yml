@@ -1,0 +1,127 @@
+name: Apply mobile hotfix now
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/apply-mobile-hotfix-now.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: hotfix/mobile-editor-width
+          fetch-depth: 0
+
+      - name: Apply mobile width fix
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          marker = 'sciwrix-mobile-width-hotfix-v1'
+          if marker not in text:
+              close_head = text.lower().rfind('</head>')
+              close_body = text.lower().rfind('</body>')
+              close_html = text.lower().rfind('</html>')
+              if not (0 <= close_head < close_body < close_html):
+                  raise SystemExit('Could not safely locate the real closing tags')
+              css = r'''
+  <style id="sciwrix-mobile-width-hotfix-v1">
+    @media (max-width: 700px) {
+      html, body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+      }
+
+      body.sciwrix-ribbon-enabled,
+      body.sciwrix-ribbon-enabled .app,
+      body.sciwrix-ribbon-enabled .app-shell,
+      body.sciwrix-ribbon-enabled main,
+      body.sciwrix-ribbon-enabled .workspace,
+      body.sciwrix-ribbon-enabled .editor-area,
+      body.sciwrix-ribbon-enabled .editor-wrap,
+      body.sciwrix-ribbon-enabled .editor-shell,
+      body.sciwrix-ribbon-enabled .editor-pane,
+      body.sciwrix-ribbon-enabled .editor-container,
+      body.sciwrix-ribbon-enabled .editor-canvas,
+      body.sciwrix-ribbon-enabled .editor-surface,
+      body.sciwrix-ribbon-enabled .editor-content,
+      body.sciwrix-ribbon-enabled #wysiwygEditor,
+      body.sciwrix-ribbon-enabled #sourceEditor,
+      body.sciwrix-ribbon-enabled [contenteditable="true"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      body.sciwrix-ribbon-enabled .workspace,
+      body.sciwrix-ribbon-enabled .editor-area,
+      body.sciwrix-ribbon-enabled .editor-wrap,
+      body.sciwrix-ribbon-enabled .editor-shell,
+      body.sciwrix-ribbon-enabled .editor-pane,
+      body.sciwrix-ribbon-enabled .editor-container,
+      body.sciwrix-ribbon-enabled .editor-canvas,
+      body.sciwrix-ribbon-enabled .editor-surface {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        overflow-x: hidden !important;
+      }
+
+      body.sciwrix-ribbon-enabled #wysiwygEditor,
+      body.sciwrix-ribbon-enabled [contenteditable="true"] {
+        margin: 0 !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        overflow-wrap: anywhere !important;
+        word-break: normal !important;
+      }
+
+      body.sciwrix-ribbon-enabled img,
+      body.sciwrix-ribbon-enabled table,
+      body.sciwrix-ribbon-enabled pre,
+      body.sciwrix-ribbon-enabled svg,
+      body.sciwrix-ribbon-enabled canvas {
+        max-width: 100% !important;
+      }
+
+      body.sciwrix-ribbon-enabled pre,
+      body.sciwrix-ribbon-enabled table {
+        overflow-x: auto !important;
+      }
+    }
+  </style>
+'''
+              path.write_text(text[:close_head] + css + text[close_head:], encoding='utf-8')
+
+          updated = path.read_text(encoding='utf-8')
+          if updated.count(marker) != 1:
+              raise SystemExit(f'Expected one hotfix marker, found {updated.count(marker)}')
+          PY
+
+      - name: Run smoke checks
+        run: python3 tools/smoke_test.py
+
+      - name: Commit hotfix to branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'Hotfix already present.'
+          else
+            git commit -m 'Fix mobile editor width overflow'
+            git push origin HEAD:hotfix/mobile-editor-width
+          fi
