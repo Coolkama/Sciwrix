@@ -1,4 +1,4 @@
-name: Diagnose Normal block style
+name: Fix Normal block style
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  diagnose:
+  patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,38 +19,77 @@ jobs:
           ref: feature/revised-ribbon-ui
           fetch-depth: 0
 
-      - name: Capture relevant ribbon source
+      - name: Make Normal a repeatable block-style command
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
-          text = Path('index.html').read_text(encoding='utf-8')
-          terms = [
-              'function applyVisualBlock',
-              "if (state.activeTab === 'view')",
-              "event.target.id === 'sciwrixBlockStyle'",
-              'function initialise()',
-          ]
-          output = []
-          for term in terms:
-              index = text.find(term)
-              output.append(f'=== {term} at {index} ===')
-              if index >= 0:
-                  output.append(text[max(0, index - 250):index + 1600])
-              output.append('')
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
 
-          pattern = re.compile(r"  function applyVisualBlock\(kind\) \{.*?\n  \}\n\n  function applyBlockStyle", re.DOTALL)
-          output.append(f'applyVisualBlock regex matches: {len(pattern.findall(text))}')
-          output.append(f'initialise marker count: {text.count("  }\\n\\n  if (document.readyState === \'loading\') {")}')
-          output.append(f'forced reset count: {text.count("event.target.value = \'normal\';")}')
-          Path('normal-debug.txt').write_text('\n'.join(output), encoding='utf-8')
+          old_visual = '''  function applyVisualBlock(kind) {
+            const visual = byId('wysiwygEditor');
+            if (!visual) return false;
+            visual.focus({ preventScroll: true });
+            const tag = kind === 'code' ? 'pre' : 'p';
+            document.execCommand('formatBlock', false, tag);
+            dispatchEditorInput(visual);
+            return true;
+          }'''
+          new_visual = '''  function applyVisualBlock(kind) {
+            const visual = byId('wysiwygEditor');
+            if (!visual) return false;
+            const tag = kind === 'code' ? '<pre>' : '<p>';
+
+            if (typeof window.execWysiwyg === 'function') {
+              window.execWysiwyg('formatBlock', tag);
+              return true;
+            }
+
+            document.execCommand('formatBlock', false, tag);
+            dispatchEditorInput(visual);
+            return true;
+          }'''
+          if text.count(old_visual) != 1:
+              raise SystemExit(f'Expected one applyVisualBlock function, found {text.count(old_visual)}')
+          text = text.replace(old_visual, new_visual, 1)
+
+          old_option = '<option value="normal">Normal</option>'
+          new_option = '<option value="" selected>Style</option>' + old_option
+          if text.count(old_option) != 1:
+              raise SystemExit(f'Expected one Normal option, found {text.count(old_option)}')
+          text = text.replace(old_option, new_option, 1)
+
+          old_handler = '''      if (event.target.id === 'sciwrixBlockStyle') {
+                applyBlockStyle(event.target.value);
+                event.target.value = 'normal';
+              } else if (event.target.id === 'sciwrixDocumentStyle') {'''
+          new_handler = '''      if (event.target.id === 'sciwrixBlockStyle') {
+                const blockStyle = event.target.value;
+                if (blockStyle) applyBlockStyle(blockStyle);
+                event.target.value = '';
+              } else if (event.target.id === 'sciwrixDocumentStyle') {'''
+          if text.count(old_handler) != 1:
+              raise SystemExit(f'Expected one block-style handler, found {text.count(old_handler)}')
+          text = text.replace(old_handler, new_handler, 1)
+
+          if "event.target.value = 'normal';" in text:
+              raise SystemExit('Block-style selector still resets to Normal')
+          if '<option value="" selected>Style</option><option value="normal">Normal</option>' not in text:
+              raise SystemExit('Repeatable Style command selector was not created')
+          if "window.execWysiwyg('formatBlock', tag)" not in text:
+              raise SystemExit('Visual Normal formatting does not preserve the editor selection')
+
+          path.write_text(text, encoding='utf-8')
           PY
 
-      - name: Commit diagnostic
+      - name: Run repository smoke checks
+        run: python3 tools/smoke_test.py
+
+      - name: Commit fix
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add normal-debug.txt
-          git commit -m 'Add temporary Normal-style diagnostic'
+          git add index.html
+          git commit -m 'Make Normal block style functional'
           git push origin HEAD:feature/revised-ribbon-ui
