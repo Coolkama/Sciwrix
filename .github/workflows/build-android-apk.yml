@@ -17,7 +17,7 @@ on:
       - 'index.html'
       - 'android/**'
       - 'tools/smoke_test.py'
-      - 'tools/update_onboarding_copy.py'
+      - 'tools/repair_starter_literal.py'
       - '.github/workflows/build-android-apk.yml'
 
 permissions:
@@ -42,54 +42,32 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Apply revised starter document and help text
+      - name: Repair starter document JavaScript literal
+        run: python3 tools/repair_starter_literal.py
+
+      - name: Run Sciwrix smoke checks
+        run: python3 tools/smoke_test.py
+
+      - name: Validate updated help and inline JavaScript
         run: |
           python3 - <<'PY'
-          from pathlib import Path
-          path = Path('tools/update_onboarding_copy.py')
-          text = path.read_text(encoding='utf-8')
-          text = text.replace("help_intro = '''", "help_intro = r'''", 1)
-          path.write_text(text, encoding='utf-8')
-          PY
-          python3 tools/update_onboarding_copy.py
-
-      - name: Capture Sciwrix smoke result
-        run: |
-          set +e
-          python3 tools/smoke_test.py > tools/onboarding_smoke_result.txt 2>&1
-          status=$?
-          set -e
-          cat tools/onboarding_smoke_result.txt
-          echo "Smoke exit status: $status" >> tools/onboarding_smoke_result.txt
-
-      - name: Capture updated HTML validation result
-        run: |
-          set +e
-          python3 - <<'PY' > tools/onboarding_validation_result.txt 2>&1
           from html.parser import HTMLParser
           from pathlib import Path
           import subprocess
           import tempfile
 
           text = Path('index.html').read_text(encoding='utf-8')
-          failures = []
-
-          def check(name, condition):
-              print(f'{name}: {"PASS" if condition else "FAIL"}')
-              if not condition:
-                  failures.append(name)
-
-          check('starter title', '# Welcome to Sciwrix' in text)
-          check('ribbon section', '## The ribbon' in text)
-          check('help ribbon tabs', '<h3>Ribbon tabs</h3>' in text)
-          check('help layout section', '<h3>Editing views and layout</h3>' in text)
-          check('help style section', '<h3>Document style, printing, and export</h3>' in text)
-          check('help heading', '<strong>Help &amp; About</strong>' in text)
-          check('old top toolbar removed', '<h3>Top toolbar</h3>' not in text)
-          check('old edit toolbar removed', '<h3>Edit toolbar</h3>' not in text)
-          check('licence start preserved', text.count('SCIENCEMD-LICENCES-START') == 1)
-          check('licence end preserved', text.count('SCIENCEMD-LICENCES-END') == 1)
-          check('valid document tail', text.rstrip().endswith('</html>'))
+          assert '# Welcome to Sciwrix' in text
+          assert '## The ribbon' in text
+          assert '<h3>Ribbon tabs</h3>' in text
+          assert '<h3>Editing views and layout</h3>' in text
+          assert '<h3>Document style, printing, and export</h3>' in text
+          assert '<strong>Help &amp; About</strong>' in text
+          assert '<h3>Top toolbar</h3>' not in text
+          assert '<h3>Edit toolbar</h3>' not in text
+          assert text.count('SCIENCEMD-LICENCES-START') == 1
+          assert text.count('SCIENCEMD-LICENCES-END') == 1
+          assert text.rstrip().endswith('</html>')
 
           class Scripts(HTMLParser):
               def __init__(self):
@@ -115,7 +93,6 @@ jobs:
 
           parser = Scripts()
           parser.feed(text)
-          node_ok = True
           with tempfile.TemporaryDirectory() as tmp:
               for i, (script_type, source) in enumerate(parser.scripts):
                   if not source.strip():
@@ -123,20 +100,8 @@ jobs:
                   suffix = '.mjs' if script_type == 'module' else '.js'
                   path = Path(tmp) / f'script-{i}{suffix}'
                   path.write_text(source, encoding='utf-8')
-                  result = subprocess.run(['node', '--check', str(path)], text=True, capture_output=True)
-                  if result.returncode:
-                      node_ok = False
-                      print(f'Node syntax failure in script {i}:')
-                      print(result.stdout)
-                      print(result.stderr)
-          check('inline JavaScript syntax', node_ok)
-          print(f'Total failures: {len(failures)}')
-          raise SystemExit(1 if failures else 0)
+                  subprocess.run(['node', '--check', str(path)], check=True)
           PY
-          status=$?
-          set -e
-          cat tools/onboarding_validation_result.txt
-          echo "Validation exit status: $status" >> tools/onboarding_validation_result.txt
 
       - name: Lint and build debug APK
         working-directory: android
@@ -153,14 +118,14 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Commit revised onboarding content
+      - name: Commit repaired onboarding content
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html tools/onboarding_smoke_result.txt tools/onboarding_validation_result.txt
+          git add index.html
           if git diff --cached --quiet; then
             echo 'No onboarding changes required'
             exit 0
           fi
-          git commit -m 'Update starter document and help for ribbon UI'
+          git commit -m 'Repair starter document JavaScript literal'
           git push origin HEAD:feature/revised-ribbon-ui
