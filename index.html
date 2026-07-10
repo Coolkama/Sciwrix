@@ -4083,7 +4083,7 @@
 
   <aside id="helpDrawer" class="nav-drawer help-drawer" aria-label="Help and About" aria-hidden="true">
     <div class="nav-drawer-head">
-      <strong>Help / About</strong>
+      <strong>Help &amp; About</strong>
       <button id="closeHelpBtn" type="button">Close</button>
     </div>
 
@@ -4092,7 +4092,7 @@
         <div class="about-icon" aria-hidden="true">Σ</div>
         <div>
           <h2>Sciwrix</h2>
-          <p><strong>Version 1.2.2</strong></p>
+          <p><strong>Version 1.5.1</strong></p>
           <p>An offline-first Markdown and LaTeX editor for scientific and technical writing.</p>
           <p>The standalone browser edition and Android app keep document editing on your device. No account or server is required.</p>
           <p class="creator">Designed and created by Trevor Neil Kelleher.</p>
@@ -4101,84 +4101,67 @@
       </section>
 
       <section>
-        <h3>Basic workflow</h3>
+        <h3>Getting started</h3>
         <ol>
-          <li>Use <strong>New</strong> to start from the built-in Sciwrix starter document.</li>
-          <li>Use <strong>Open</strong> to load a <code>.md</code> file.</li>
-          <li>Write in the visual editor, or switch to <strong>MD</strong> for exact Markdown source editing.</li>
-          <li>Choose a document style from the <strong>Output</strong> group.</li>
-          <li>Use <strong>Save</strong> or <strong>Save As</strong> to download Markdown, rendered HTML, or LaTeX.</li>
-          <li>Use <strong>Print</strong> in the Output group to print or save as PDF.</li>
+          <li>Use <strong>File → New</strong> to start from the built-in Sciwrix guide.</li>
+          <li>Use <strong>File → Open</strong> to load an existing <code>.md</code> file.</li>
+          <li>Write in <strong>Visual</strong> view, or use <strong>View → Markdown</strong> for direct source editing.</li>
+          <li>Choose a <strong>Document Style</strong> under View. The same style is used on screen and when printing.</li>
+          <li>Use <strong>Save</strong> for Markdown, or <strong>Save As</strong> to choose Markdown, rendered HTML, or LaTeX.</li>
+          <li>Use <strong>Print</strong> to print the current document or save it as PDF.</li>
         </ol>
       </section>
 
       <section>
-        <h3>Top toolbar</h3>
+        <h3>Ribbon tabs</h3>
         <table>
-          <tr><th>Button</th><th>Meaning</th></tr>
-          <tr><td>New</td><td>Start a fresh Sciwrix starter document</td></tr>
-          <tr><td>Open</td><td>Open a Markdown file</td></tr>
-          <tr><td>Save</td><td>Save the current Markdown file</td></tr>
-          <tr><td>Save As</td><td>Save with a new filename or export rendered HTML or LaTeX</td></tr>
-          <tr><td>Undo</td><td>Undo the most recent editing change</td></tr>
-          <tr><td>Redo</td><td>Restore the most recently undone change</td></tr>
-          <tr><td>Navigation</td><td>Open the section navigator built from headings</td></tr>
-          <tr><td>Maths</td><td>Open the maths palette</td></tr>
-          <tr><td>Find</td><td>Find and replace text in the Markdown source</td></tr>
-          <tr><td>Fullscreen</td><td>Enter or exit fullscreen mode</td></tr>
-          <tr><td>Theme</td><td>Switch between light and dark mode</td></tr>
-          <tr><td>Help</td><td>Open this Help and About panel</td></tr>
+          <tr><th>Tab</th><th>What it contains</th></tr>
+          <tr><td>File</td><td>New, Open, Save, Save As, and Print</td></tr>
+          <tr><td>Edit</td><td>Undo, Redo, and Find &amp; Replace</td></tr>
+          <tr><td>Markdown</td><td>Paragraphs, headings, bold, italic, quotations, and lists</td></tr>
+          <tr><td>Insert</td><td>Images and horizontal rules</td></tr>
+          <tr><td>Maths</td><td>Inline maths, display maths, and the maths palette</td></tr>
+          <tr><td>Table</td><td>Insert a table and edit its rows and columns</td></tr>
+          <tr><td>View</td><td>Visual or Markdown view, section navigation, Document Style, fullscreen, and toolbar appearance</td></tr>
+          <tr><td>Help</td><td>Open this Help &amp; About panel</td></tr>
         </table>
+        <p>The toolbar changes with the selected tab. Under View, choose <strong>Icons</strong>, <strong>Labels</strong>, or <strong>Adaptive</strong> toolbar buttons.</p>
       </section>
 
       <section>
-        <h3>Edit toolbar</h3>
-        <table>
-          <tr><th>Button</th><th>Action</th></tr>
-          <tr><td>H1</td><td>Heading 1</td></tr>
-          <tr><td>H2</td><td>Heading 2</td></tr>
-          <tr><td>H3</td><td>Heading 3</td></tr>
-          <tr><td>B</td><td>Bold</td></tr>
-          <tr><td>I</td><td>Italic</td></tr>
-          <tr><td>Quote</td><td>Block quote</td></tr>
-          <tr><td>Bullets</td><td>Bullet list</td></tr>
-          <tr><td>Numbers</td><td>Numbered list</td></tr>
-          <tr><td>Inline maths</td><td>Insert inline LaTeX maths</td></tr>
-          <tr><td>Block maths</td><td>Insert display LaTeX maths</td></tr>
-          <tr><td>Image</td><td>Embed an image into the Markdown file</td></tr>
-          <tr><td>Table</td><td>Insert a visual Markdown table</td></tr>
-          <tr><td>MD</td><td>Switch between visual editing and Markdown source editing</td></tr>
-          <tr><td>Rule</td><td>Insert a horizontal rule</td></tr>
-        </table>
+        <h3>Editing views and layout</h3>
+        <p><strong>Visual</strong> is the rendered editing view. <strong>Markdown</strong> exposes the source of the same document. There is no separate preview mode.</p>
+        <p>Editing is always continuous. On larger displays, the editor uses a comfortable page-like width and a subtle shadow. On mobile, it expands to the screen width to maximise the writing area.</p>
+        <p>The word and character count remain visible in the footer.</p>
+      </section>
+
+      <section>
+        <h3>Document style, printing, and export</h3>
+        <p>The selected <strong>Document Style</strong> controls both the on-screen document and its printed or PDF appearance. It does not change the Markdown source.</p>
+        <p><strong>Save</strong> downloads Markdown. <strong>Save As</strong> provides the filename and format choices for Markdown, standalone HTML, and LaTeX. <strong>Print</strong> opens the browser print dialog.</p>
       </section>
 
       <section>
         <h3>Tables</h3>
-        <p>Select <strong>Table</strong> in the edit toolbar, choose the number of columns and data rows, then type directly into the cells.</p>
-        <p>Clicking a cell opens controls for adding or removing rows and columns. Press <strong>Tab</strong> to move through cells; pressing Tab in the final cell adds another row.</p>
+        <p>Use <strong>Table → Insert table</strong>, choose the number of columns and data rows, then type directly into the cells.</p>
+        <p>Place the cursor inside a table to add or remove rows and columns, or delete the entire table. Press <strong>Tab</strong> to move through cells; pressing Tab in the final cell adds another row.</p>
       </section>
 
       <section>
         <h3>Maths</h3>
         <p>Inline maths:</p>
         <pre><code>\(E = mc^2\)</code></pre>
-        <p>Block maths:</p>
+        <p>Display maths:</p>
         <pre><code>\[
-F = G\frac{m_1m_2}{r^2}
+F = Grac{m_1m_2}{r^2}
 \]</code></pre>
-        <p>In the visual editor, click a rendered formula to edit its LaTeX source, then click <strong>Done</strong> to re-render it.</p>
+        <p>Use the Maths tab to insert maths or open the maths palette. In Visual view, select a rendered formula to edit its LaTeX source, then choose <strong>Done</strong> to render it again.</p>
       </section>
 
       <section>
-        <h3>Desktop layout</h3>
-        <p>Sciwrix uses a full-width visual editor. A hidden renderer prepares styled print, PDF, and HTML output without taking up document workspace.</p>
-        <p>The word count and character count are shown in the bottom footer status bar.</p>
-      </section>
-
-      <section>
-        <h3>Autosave warning</h3>
-        <p>Autosave is browser storage. It is useful as a safety net, but it is not the same as saving a file. Use <strong>Save</strong> or <strong>Save As</strong> to create a real Markdown file.</p>
-        <p>Embedded images keep their original file format and dimensions. Sciwrix only shortens them in the editor view; saved Markdown contains the full standard embedded image.</p>
+        <h3>Autosave and embedded images</h3>
+        <p>Autosave is browser storage. It is a useful safety net, but it is not the same as saving a file. Use <strong>Save</strong> or <strong>Save As</strong> to create a real document file.</p>
+        <p>Embedded images retain their original format and dimensions. Sciwrix may display them at a smaller size in the editor, while the saved Markdown keeps the full embedded image.</p>
       </section>
 
       <!-- SCIENCEMD-LICENCES-START -->
@@ -4531,9 +4514,112 @@ THE SOFTWARE.
     let activeMathEditInput = null;
     let activeTableCell = null;
     let savedTableSourceSelection = null;
+    const starterText = "# Welcome to Sciwrix
 
-    const starterText = "# Welcome to Sciwrix\n\n**Sciwrix** is an offline-first Markdown and LaTeX editor for scientific notes, technical documents, revision material, and print-ready papers.\n\nUse **Write** for visual editing or **MD** when you want direct control of the Markdown source. Your document remains a normal `.md` file.\n\n> Delete this starter guide when you are ready and begin writing.\n\n---\n\n## Quick start\n\n- **New** creates a fresh starter document.\n- **Open** loads an existing Markdown file.\n- **Save** downloads the current `.md` file.\n- **Save As** saves under a new name or exports rendered HTML.\n- **Undo** and **Redo** reverse or restore editing changes.\n- **Print** prints the selected document style or saves it as PDF.\n\nAutosave is a safety net stored on this device. Use **Save** regularly to create a real file.\n\n---\n\n## Headings and formatting\n\nUse headings to organise longer documents:\n\n```markdown\n# Document title\n## Main section\n### Subsection\n```\n\nThe edit toolbar also provides bold, italic, quotations, lists, horizontal rules, images, tables, inline maths, and block maths.\n\n---\n\n## Maths\n\nInline maths uses `\\( ... \\)`:\n\n\\(E = mc^2\\)\n\nDisplay maths uses `\\[ ... \\]`:\n\n\\[\nF = G\\frac{m_1m_2}{r^2}\n\\]\n\nIn **Write** mode, select a rendered formula to edit its LaTeX source, then choose **Done** to render it again.\n\n---\n\n## Tables\n\nUse the **Table** button to insert and edit a Markdown table visually.\n\n| Quantity | Meaning | Relationship |\n|---|---|---|\n| \\(v\\) | wave speed | \\(v = f\\lambda\\) |\n| \\(f\\) | frequency | measured in hertz |\n| \\(\\lambda\\) | wavelength | measured in metres |\n\n---\n\n## Code\n\nTriple backticks create a code block:\n\n```csharp\npublic static double KineticEnergy(double mass, double velocity)\n{\n    return 0.5 * mass * velocity * velocity;\n}\n```\n\n---\n\n## Output styles\n\nChoose a style from the **Output** group to change the visual document and its printed or PDF appearance. The selected style does not change the Markdown source.\n\nSciwrix works as a standalone HTML file, through GitHub Pages, and as an Android app.\n";
+**Sciwrix** is an offline-first Markdown and LaTeX editor for scientific and technical writing. Your document remains a normal `.md` file, and all editing stays on your device.
 
+> This starter document introduces the current Sciwrix interface. Delete it when you are ready to begin your own document.
+
+---
+
+## The ribbon
+
+Sciwrix organises its controls into focused tabs:
+
+- **File** — create, open, save, save as, and print documents.
+- **Edit** — undo, redo, and find or replace text.
+- **Markdown** — paragraphs, headings, bold, italic, quotations, and lists.
+- **Insert** — images and horizontal rules.
+- **Maths** — inline maths, display maths, and the maths palette.
+- **Table** — insert and edit Markdown tables.
+- **View** — switch between Visual and Markdown views, navigate sections, choose the document style, and enter fullscreen.
+- **Help** — open the full guide and application information.
+
+The toolbar changes when you select a different tab. Under **View**, you can also choose Icons, Labels, or Adaptive toolbar buttons.
+
+---
+
+## Visual and Markdown views
+
+Use **Visual** for normal writing and formatting. Use **Markdown** when you want direct control of the source text.
+
+Both views edit the same document. There is no separate preview mode: the Visual editor is the rendered editing view.
+
+Editing is always continuous. On larger displays the document uses a comfortable page-like width with a subtle shadow. On mobile it expands to the screen width to maximise the writing area.
+
+---
+
+## Saving and printing
+
+- **Save** downloads the current Markdown file.
+- **Save As** lets you choose a filename and save as Markdown, rendered HTML, or LaTeX.
+- **Print** prints the document as it currently appears, or lets your browser save it as PDF.
+
+The selected **Document Style** is used both on screen and when printing. It changes appearance only; it does not alter your Markdown source.
+
+Autosave is stored in this browser as a safety net. It is not a replacement for saving a real file.
+
+---
+
+## Headings and formatting
+
+Use headings to organise longer documents:
+
+```markdown
+# Document title
+## Main section
+### Subsection
+```
+
+You can apply paragraph and heading styles from the **Markdown** tab, alongside bold, italic, block quotations, bulleted lists, and numbered lists.
+
+> Quotations and code blocks use neutral shading so the document remains clear without adding decorative colour.
+
+---
+
+## Maths
+
+Inline maths stays within a sentence:
+
+\(E = mc^2\)
+
+Display maths is shown on its own line:
+
+\[
+F = G\frac{m_1m_2}{r^2}
+\]
+
+Use the **Maths** tab to insert maths or open the maths palette. In Visual view, select a rendered formula to edit its LaTeX source, then choose **Done** to render it again.
+
+---
+
+## Tables
+
+Use **Table → Insert table**, choose the number of columns and rows, then type directly into the cells.
+
+| Quantity | Meaning | Relationship |
+|---|---|---|
+| \(v\) | wave speed | \(v = f\lambda\) |
+| \(f\) | frequency | measured in hertz |
+| \(\lambda\) | wavelength | measured in metres |
+
+When the cursor is inside a table, the Table tab provides controls for adding or removing rows and columns, or deleting the table.
+
+---
+
+## Code
+
+Triple backticks create a code block:
+
+```csharp
+public static double KineticEnergy(double mass, double velocity)
+{
+    return 0.5 * mass * velocity * velocity;
+}
+```
+
+Sciwrix works as a standalone HTML file, through GitHub Pages, and as an Android app.
+";
     function showToast(message) {
       clearTimeout(toastTimer);
       toast.textContent = message;

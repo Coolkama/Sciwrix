@@ -1,0 +1,2 @@
+ERROR: starterText must be a valid single-line JavaScript string with escaped newlines
+Smoke exit status: 1
