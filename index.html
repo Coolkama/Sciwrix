@@ -72106,6 +72106,99 @@
   body.sciwrix-ribbon-enabled .nav-drawer {
     z-index: 2147483647 !important;
   }
+
+
+  /* Sciwrix mobile viewport hotfix v3 */
+  @media screen and (max-width: 850px) {
+    html,
+    body,
+    body.sciwrix-ribbon-enabled {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      overflow-x: hidden !important;
+    }
+
+    body.sciwrix-ribbon-enabled > main,
+    body.sciwrix-ribbon-enabled .workspace,
+    body.sciwrix-ribbon-enabled #editorPanel {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      overflow-x: hidden !important;
+    }
+
+    body.sciwrix-ribbon-enabled .workspace {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    body.sciwrix-ribbon-enabled #editorPanel {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor,
+    body.sciwrix-ribbon-enabled #editor {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+      box-sizing: border-box !important;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor {
+      overflow-x: hidden !important;
+    }
+
+    body.sciwrix-ribbon-enabled #editor {
+      overflow-x: hidden !important;
+      white-space: pre-wrap !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor,
+    body.sciwrix-ribbon-enabled #wysiwygEditor * {
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      overflow-wrap: anywhere !important;
+      word-break: normal !important;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor p,
+    body.sciwrix-ribbon-enabled #wysiwygEditor li,
+    body.sciwrix-ribbon-enabled #wysiwygEditor blockquote,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h1,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h2,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h3,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h4,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h5,
+    body.sciwrix-ribbon-enabled #wysiwygEditor h6 {
+      width: auto !important;
+      white-space: normal !important;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor img,
+    body.sciwrix-ribbon-enabled #wysiwygEditor svg,
+    body.sciwrix-ribbon-enabled #wysiwygEditor canvas,
+    body.sciwrix-ribbon-enabled #wysiwygEditor mjx-container {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    body.sciwrix-ribbon-enabled #wysiwygEditor table,
+    body.sciwrix-ribbon-enabled #wysiwygEditor pre {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -76364,6 +76457,8 @@ ${latex}
     }
 
     function setSourceMode(enabled) {
+      const previousProgress = getScrollProgress(getActiveEditorScroller());
+
       sourceMode = !!enabled;
       if (sourceMode) {
         hideTableTools();
@@ -76374,15 +76469,27 @@ ${latex}
         wysiwygEditor.classList.add('hidden');
         editor.classList.remove('hidden');
         editModeLabel.textContent = 'Markdown source';
-        editor.focus();
       } else {
         syncWysiwygFromMarkdown(true);
         editor.classList.add('hidden');
         wysiwygEditor.classList.remove('hidden');
         editModeLabel.textContent = 'Visual editor';
-        wysiwygEditor.focus();
       }
-      resyncLinkedScrollAfterRender(getScrollProgress(getActiveEditorScroller()));
+
+      const restorePosition = () => {
+        const destinationScroller = getActiveEditorScroller();
+        setScrollProgress(destinationScroller, previousProgress);
+        lastScrollProgress = previousProgress;
+      };
+
+      restorePosition();
+      requestAnimationFrame(() => {
+        restorePosition();
+        requestAnimationFrame(restorePosition);
+      });
+      setTimeout(restorePosition, 80);
+      setTimeout(restorePosition, 250);
+      setTimeout(restorePosition, 600);
     }
 
     function execWysiwyg(command, value = null) {
@@ -76774,7 +76881,8 @@ ${latex}
     }
 
     function getActiveEditorScroller() {
-      return sourceMode ? editor : wysiwygEditor;
+      if (sourceMode) return editor;
+      return document.querySelector('main') || wysiwygEditor;
     }
 
     function linkedScrollEnabled() {
@@ -77944,6 +78052,15 @@ ${body}
       if (currentView !== 'preview') lastScrollProgress = getScrollProgress(wysiwygEditor);
       if (!sourceMode) syncPreviewScrollToEditor();
     });
+    const mainScroller = document.querySelector('main');
+    if (mainScroller) {
+      mainScroller.addEventListener('scroll', () => {
+        if (!sourceMode && currentView !== 'preview') {
+          lastScrollProgress = getScrollProgress(mainScroller);
+          syncPreviewScrollToEditor();
+        }
+      });
+    }
     preview.addEventListener('scroll', () => {
       if (currentView !== 'edit') lastScrollProgress = getScrollProgress(preview);
       syncEditorScrollToPreview();
