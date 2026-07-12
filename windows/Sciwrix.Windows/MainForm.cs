@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.Json;
+using Microsoft.Win32;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 
@@ -19,7 +21,13 @@ internal sealed class MainForm : Form
     {
         initialDocument = IsDocument(path) ? Path.GetFullPath(path!) : null;
         Text = "Sciwrix"; Width = 1280; Height = 850; MinimumSize = new(720, 520);
-        StartPosition = FormStartPosition.CenterScreen; AllowDrop = true; Controls.Add(webView);
+        StartPosition = FormStartPosition.CenterScreen; AllowDrop = true;
+        var menu = new MenuStrip();
+        var windowsMenu = new ToolStripMenuItem("Windows");
+        var associateItem = new ToolStripMenuItem("Associate with Markdown files…");
+        associateItem.Click += (_, _) => AssociateMarkdownFiles();
+        windowsMenu.DropDownItems.Add(associateItem); menu.Items.Add(windowsMenu);
+        MainMenuStrip = menu; Controls.Add(webView); Controls.Add(menu);
         Load += async (_, _) => await InitialiseAsync(); DragEnter += OnDragEnter; DragDrop += OnDragDrop;
     }
 
@@ -120,6 +128,45 @@ internal sealed class MainForm : Form
     }
 
     private void CancelSave() { incomingSave?.Dispose(); incomingSave = null; incomingSaveAs = false; }
+
+    private void AssociateMarkdownFiles()
+    {
+        try
+        {
+            var executable = Environment.ProcessPath ?? Application.ExecutablePath;
+            const string progId = "Sciwrix.Markdown";
+            using (var type = Registry.CurrentUser.CreateSubKey($@"Software\Classes\{progId}"))
+            {
+                type.SetValue(null, "Markdown document");
+                type.SetValue("FriendlyTypeName", "Markdown document");
+                type.CreateSubKey("DefaultIcon")?.SetValue(null, $"\"{executable}\",0");
+                type.CreateSubKey(@"shell\open\command")?.SetValue(null, $"\"{executable}\" \"%1\"");
+            }
+            foreach (var extension in new[] { ".md", ".markdown" })
+                Registry.CurrentUser.CreateSubKey($@"Software\Classes\{extension}\OpenWithProgids")?.SetValue(progId, Array.Empty<byte>(), RegistryValueKind.None);
+
+            using (var capabilities = Registry.CurrentUser.CreateSubKey(@"Software\Sciwrix\Capabilities"))
+            {
+                capabilities.SetValue("ApplicationName", "Sciwrix");
+                capabilities.SetValue("ApplicationDescription", "Markdown and LaTeX for scientific writing");
+                using var associations = capabilities.CreateSubKey("FileAssociations");
+                associations?.SetValue(".md", progId); associations?.SetValue(".markdown", progId);
+            }
+            Registry.CurrentUser.CreateSubKey(@"Software\RegisteredApplications")?.SetValue("Sciwrix", @"Software\Sciwrix\Capabilities");
+            SHChangeNotify(0x08000000, 0, IntPtr.Zero, IntPtr.Zero);
+
+            MessageBox.Show(this, "Sciwrix is now registered as an option for Markdown documents. Windows will open Default Apps so you can confirm it for .md and .markdown files.", "Sciwrix", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Process.Start(new ProcessStartInfo("ms-settings:defaultapps?registeredAppUser=Sciwrix") { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, $"Sciwrix could not register the Markdown association.\n\n{ex.Message}", "Sciwrix", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    [DllImport("shell32.dll")]
+    private static extern void SHChangeNotify(uint eventId, uint flags, IntPtr item1, IntPtr item2);
+
     private void UpdateTitle() => Text = currentDocumentPath is null ? "Sciwrix" : $"{Path.GetFileName(currentDocumentPath)} — Sciwrix";
     private void OnNavigationStarting(object? _, CoreWebView2NavigationStartingEventArgs e) { if (Uri.TryCreate(e.Uri, UriKind.Absolute, out var uri) && uri.IsFile) return; e.Cancel = true; OpenExternal(e.Uri); }
     private void OnNewWindowRequested(object? _, CoreWebView2NewWindowRequestedEventArgs e) { e.Handled = true; OpenExternal(e.Uri); }
