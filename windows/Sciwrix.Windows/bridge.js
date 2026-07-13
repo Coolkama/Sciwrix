@@ -89,8 +89,10 @@
           try { forceWysiwygFromMarkdown({ resetScroll: true, focusStart: false }); } catch (error) { console.error(error); }
           try { renderNow(); } catch (error) { console.error(error); }
           saveDraft(false);
+          try { window.__sciwrixWindows.showToast('Opened ' + payload.name); } catch (error) { console.error(error); }
+          // Mark success last, after all document work. A cosmetic toast must
+          // never turn an otherwise successful file open into a host error.
           openState = 'ok';
-          showToast('Opened ' + payload.name);
         } catch (error) {
           console.error('Windows document open failed:', error);
           openState = 'error:' + error.message;
