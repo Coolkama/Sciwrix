@@ -3,6 +3,7 @@
   const post = message => window.chrome.webview.postMessage(message);
   const pendingUrls = new Set();
   let nextSaveAs = false;
+  let openState = 'idle';
   const labelFor = target => ((target.getAttribute?.('aria-label') || '') + ' ' + (target.getAttribute?.('title') || '') + ' ' + (target.textContent || '')).trim().toLowerCase().replace(/\s+/g, ' ');
 
   document.addEventListener('click', event => {
@@ -47,6 +48,62 @@
 
   window.__sciwrixWindows = {
     openDocument(payload) {
+      openState = 'loading';
+      setTimeout(async () => {
+        try {
+          const binary = atob(payload.data), bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+          const text = new TextDecoder('utf-8').decode(bytes);
+
+          documentLoadInProgress = true;
+          clearTimeout(renderTimer);
+          clearTimeout(historyTimer);
+          prepareForDocumentOpen();
+          embeddedImages = {};
+          nextImageNumber = 1;
+          saveImageMap();
+
+          // Accept the file and its identity first. Rendering is deliberately
+          // non-transactional: a visual-render problem must never restore the
+          // previous document after the new text has reached autosave.
+          try {
+            setEditorMarkdown(text, { collapseImages: true, resetScroll: true });
+          } catch (renderError) {
+            console.error('Initial Windows document render failed:', renderError);
+            editor.value = collapseEmbeddedImages(text);
+            safeSetStorage(STORAGE_KEY, editor.value, true);
+          }
+          setFileName(payload.name);
+          saveDraft(false);
+
+          sourceMode = false;
+          editor.classList.add('hidden');
+          wysiwygEditor.classList.remove('hidden');
+          editModeLabel.textContent = 'Visual editor';
+          try { switchView('edit'); } catch (error) { console.error(error); }
+          try { forceWysiwygFromMarkdown({ resetScroll: true, focusStart: false }); } catch (error) { console.error(error); }
+          try { renderNow(); } catch (error) { console.error(error); }
+          try { resetHistory(editor.value || ''); } catch (error) { console.error(error); }
+
+          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          try { forceWysiwygFromMarkdown({ resetScroll: true, focusStart: false }); } catch (error) { console.error(error); }
+          try { renderNow(); } catch (error) { console.error(error); }
+          saveDraft(false);
+          openState = 'ok';
+          showToast('Opened ' + payload.name);
+        } catch (error) {
+          console.error('Windows document open failed:', error);
+          openState = 'error:' + error.message;
+        } finally {
+          documentLoadInProgress = false;
+        }
+      }, 0);
+      return 'started';
+    },
+    getOpenState() {
+      return openState;
+    },
+    openDocumentThroughPicker(payload) {
       try {
         const binary = atob(payload.data), bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
