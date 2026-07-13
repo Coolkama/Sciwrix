@@ -223,6 +223,9 @@ require("Software\\RegisteredApplications" in windows_form, "Windows registered-
 require('new[] { ".md", ".markdown" }' in windows_form, "Windows Markdown extensions are not registered")
 require("save-begin" in windows_bridge and "save-chunk" in windows_bridge, "Windows save bridge is missing")
 require("openDocument" in windows_bridge, "Windows document-open bridge is missing")
+require("getOpenState" in windows_bridge, "Windows document-open completion handshake is missing")
+require("Initial Windows document render failed" in windows_bridge, "Windows file acceptance is not protected from visual-render failures")
+require("getOpenState()" in windows_form, "Windows host does not wait for document loading to finish")
 
 require("SCIENCEMD_VERSION_CODE" in gradle, "release version override is missing")
 require("SCIENCEMD_KEYSTORE_PATH" in gradle, "release signing configuration is missing")
