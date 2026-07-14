@@ -4,3 +4,6 @@ Thumbs.db
 .idea/
 *.tmp
 *.bak
+artifacts/
+windows/Sciwrix.Windows/bin/
+windows/Sciwrix.Windows/obj/
