@@ -37,7 +37,17 @@ if (checkOnly) {
   let existing;
   try { existing = await readFile(outputPath, 'utf8'); }
   catch { throw new Error('index.html is missing. Run `npm run build`.'); }
-  if (normaliseLineEndings(existing) !== normaliseLineEndings(output)) {
+  const comparableExisting = normaliseLineEndings(existing);
+  const comparableOutput = normaliseLineEndings(output);
+  if (comparableExisting !== comparableOutput) {
+    let firstDifference = 0;
+    const sharedLength = Math.min(comparableExisting.length, comparableOutput.length);
+    while (firstDifference < sharedLength && comparableExisting[firstDifference] === comparableOutput[firstDifference]) firstDifference++;
+    const contextStart = Math.max(0, firstDifference - 60);
+    const contextEnd = firstDifference + 60;
+    console.error('Committed length:', comparableExisting.length, 'generated length:', comparableOutput.length, 'first difference:', firstDifference);
+    console.error('Committed context:', JSON.stringify(comparableExisting.slice(contextStart, contextEnd)));
+    console.error('Generated context:', JSON.stringify(comparableOutput.slice(contextStart, contextEnd)));
     throw new Error('index.html is out of date. Run `npm run build` and commit the result.');
   }
   console.log('Sciwrix standalone HTML is up to date.');
