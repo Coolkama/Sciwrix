@@ -4,7 +4,7 @@ Sciwrix is a portable, self-contained Markdown editor designed for scientific an
 
 ## Current application
 
-The complete web application is stored in [`index.html`](./index.html). Download that one file and open it in a modern browser; no installation or web server is required.
+The distributable web application is stored in [`index.html`](./index.html). It is generated from the maintainable source files in [`src`](./src), but remains one completely self-contained file for end users. Download it and open it in a modern browser; no installation, supporting file structure or web server is required.
 
 - [Sciwrix product homepage](https://coolkama.github.io/Sciwrix/home/)
 - [Launch Sciwrix online](https://coolkama.github.io/Sciwrix/)
@@ -59,7 +59,12 @@ Sciwrix embeds third-party software. Their licences, copyright notices and the l
 ## Repository structure
 
 ```text
-index.html                              Complete standalone application and embedded browser icon
+index.html                              Generated standalone application and embedded browser icon
+src/app.template.html                   Application HTML plus embedded offline vendor libraries
+src/styles/                             First-party application and ribbon styles
+src/scripts/                            First-party application, configuration and ribbon logic
+package.json                            Dependency-free Node build commands
+tools/build.mjs                         Deterministic single-file build and freshness check
 home/index.html                         Product homepage and download options
 home/assets/                            Homepage desktop and mobile screenshots
 android/                                Native Android wrapper
@@ -79,12 +84,30 @@ README.md                               Project information
 
 ## Development
 
-Sciwrix deliberately keeps the distributed application self-contained. Changes should be tested on both desktop and mobile-sized browser windows, including Markdown editing, visual editing, undo/redo, mathematics rendering, file loading, saving, printing and preview synchronisation.
+Sciwrix deliberately keeps the distributed application self-contained while using modular source files for development. Edit files beneath `src/`, then regenerate the root `index.html`:
+
+```bash
+npm run build
+```
+
+The build uses only Node.js built-ins and has no package dependencies. It inlines all first-party modules into the HTML template, rejects unresolved module markers and external script or stylesheet dependencies, and adds a generated-file banner. Check that the committed output is current with:
+
+```bash
+npm run build:check
+```
+
+Do not edit generated `index.html` directly. Changes should be tested on both desktop and mobile-sized browser windows, including Markdown editing, visual editing, undo/redo, mathematics rendering, file loading, saving, printing and preview synchronisation.
 
 Run the repository smoke checks with:
 
 ```bash
 python3 tools/smoke_test.py
+```
+
+Run both the build freshness check and smoke tests with:
+
+```bash
+npm test
 ```
 
 ## Status

@@ -32,6 +32,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
+      - name: Verify generated standalone HTML
+        run: npm run build:check
       - name: Run Sciwrix smoke checks
         run: python3 tools/smoke_test.py
       - name: Validate release inputs and signing secrets

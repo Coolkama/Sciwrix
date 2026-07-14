@@ -1,0 +1,12 @@
+{
+  "name": "sciwrix",
+  "version": "1.6.2",
+  "private": true,
+  "description": "Build tooling for the self-contained Sciwrix editor",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "build:check": "node tools/build.mjs --check",
+    "test": "npm run build:check && python tools/smoke_test.py"
+  },
+  "engines": { "node": ">=18" }
+}

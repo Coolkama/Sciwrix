@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['index.html', 'windows/**', 'tools/smoke_test.py', '.github/workflows/build-windows.yml']
+    paths: ['index.html', 'src/**', 'package.json', 'tools/build.mjs', 'windows/**', 'tools/smoke_test.py', '.github/workflows/build-windows.yml']
   pull_request:
     branches: [main]
-    paths: ['index.html', 'windows/**', 'tools/smoke_test.py', '.github/workflows/build-windows.yml']
+    paths: ['index.html', 'src/**', 'package.json', 'tools/build.mjs', 'windows/**', 'tools/smoke_test.py', '.github/workflows/build-windows.yml']
 
 permissions:
   contents: read
@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+      - name: Verify generated standalone HTML
+        run: npm run build:check
       - name: Run Sciwrix smoke checks
         run: python tools/smoke_test.py
       - name: Publish portable executable
