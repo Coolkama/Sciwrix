@@ -82,6 +82,7 @@ jobs:
           name: release-android
           path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
+          retention-days: 1
 
   windows:
     runs-on: windows-latest
@@ -105,6 +106,7 @@ jobs:
           name: release-windows
           path: windows-release/Sciwrix.exe
           if-no-files-found: error
+          retention-days: 1
 
   publish:
     needs: [android, windows]
@@ -140,7 +142,7 @@ jobs:
           name: Sciwrix-v${{ inputs.version_name }}
           path: release/
           if-no-files-found: error
-          retention-days: 90
+          retention-days: 1
       - name: Publish GitHub Release
         shell: bash
         env:
